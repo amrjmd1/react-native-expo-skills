@@ -1,0 +1,4 @@
+interface:
+  display_name: "React Native CLI Platform Assistant"
+  short_description: "React Native CLI Platform Assistant"
+  default_prompt: "Use $react-native-cli-platform-assistant to help with bare React Native CLI architecture and troubleshooting."

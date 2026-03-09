@@ -1,0 +1,4 @@
+interface:
+  display_name: "RN List Performance Control"
+  short_description: "RN List Performance Control"
+  default_prompt: "Use $rn-list-performance-control to help with large list rendering and virtualization optimization."

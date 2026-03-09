@@ -1,0 +1,9 @@
+{
+  "name": "mobile-advanced-controls",
+  "version": "1.0.0",
+  "description": "Advanced control skills for React Native and Expo",
+  "author": {
+    "name": "amr darwish",
+    "email": "amrjmd1@gmail.com"
+  }
+}

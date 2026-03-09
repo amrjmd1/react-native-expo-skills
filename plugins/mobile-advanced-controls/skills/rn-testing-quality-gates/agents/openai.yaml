@@ -1,0 +1,4 @@
+interface:
+  display_name: "RN Testing and Quality Gates"
+  short_description: "RN Testing and Quality Gates"
+  default_prompt: "Use $rn-testing-quality-gates to help with test architecture and CI quality gates for mobile."

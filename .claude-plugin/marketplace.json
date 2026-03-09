@@ -1,0 +1,27 @@
+{
+  "name": "react-native-expo-plugins",
+  "owner": {
+    "name": "amr darwish",
+    "email": "amrjmd1@gmail.com"
+  },
+  "metadata": {
+    "description": "Public React Native and Expo skill plugins for AI agents"
+  },
+  "plugins": [
+    {
+      "name": "expo-platform",
+      "source": "./plugins/expo-platform",
+      "description": "Core Expo engineering skills for app architecture, EAS, updates, config, and permissions."
+    },
+    {
+      "name": "react-native-cli-platform",
+      "source": "./plugins/react-native-cli-platform",
+      "description": "Core bare React Native CLI skills for native modules, builds, signing, and debugging."
+    },
+    {
+      "name": "mobile-advanced-controls",
+      "source": "./plugins/mobile-advanced-controls",
+      "description": "Focused advanced skills for state, navigation, forms, animations, testing, and list performance."
+    }
+  ]
+}

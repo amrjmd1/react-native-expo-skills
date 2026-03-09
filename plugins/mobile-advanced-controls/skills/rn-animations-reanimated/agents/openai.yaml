@@ -1,0 +1,4 @@
+interface:
+  display_name: "RN Animations with Reanimated"
+  short_description: "RN Animations with Reanimated"
+  default_prompt: "Use $rn-animations-reanimated to help with high-performance animations and gesture interactions."

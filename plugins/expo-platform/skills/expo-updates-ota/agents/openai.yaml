@@ -1,0 +1,4 @@
+interface:
+  display_name: "Expo Updates OTA Assistant"
+  short_description: "Expo Updates OTA Assistant"
+  default_prompt: "Use $expo-updates-ota to help with OTA channels, runtimeVersion, and safe rollout."

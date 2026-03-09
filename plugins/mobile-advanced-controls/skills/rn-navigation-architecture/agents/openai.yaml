@@ -1,0 +1,4 @@
+interface:
+  display_name: "RN Navigation Architecture"
+  short_description: "RN Navigation Architecture"
+  default_prompt: "Use $rn-navigation-architecture to help with typed route architecture and deep-link-safe navigation."

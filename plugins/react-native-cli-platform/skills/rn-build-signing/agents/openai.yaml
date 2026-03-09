@@ -1,0 +1,4 @@
+interface:
+  display_name: "RN Build and Signing Assistant"
+  short_description: "RN Build and Signing Assistant"
+  default_prompt: "Use $rn-build-signing to help with release signing and CI-safe build setup."

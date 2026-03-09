@@ -1,0 +1,4 @@
+interface:
+  display_name: "Expo EAS Release Assistant"
+  short_description: "Expo EAS Release Assistant"
+  default_prompt: "Use $expo-eas-release to help with EAS build, submit, and release hardening."

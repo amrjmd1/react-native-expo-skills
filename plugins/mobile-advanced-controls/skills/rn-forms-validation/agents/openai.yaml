@@ -1,0 +1,4 @@
+interface:
+  display_name: "RN Forms and Validation"
+  short_description: "RN Forms and Validation"
+  default_prompt: "Use $rn-forms-validation to help with typed form patterns with validation and reusable fields."

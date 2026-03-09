@@ -1,0 +1,4 @@
+interface:
+  display_name: "RN State Management Architecture"
+  short_description: "RN State Management Architecture"
+  default_prompt: "Use $rn-state-management-architecture to help with state layer design with clear ownership boundaries."

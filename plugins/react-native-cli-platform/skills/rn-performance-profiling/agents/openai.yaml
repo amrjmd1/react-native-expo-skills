@@ -1,0 +1,4 @@
+interface:
+  display_name: "RN Performance Profiling Assistant"
+  short_description: "RN Performance Profiling Assistant"
+  default_prompt: "Use $rn-performance-profiling to help with profiling and optimization of rendering and memory hot paths."

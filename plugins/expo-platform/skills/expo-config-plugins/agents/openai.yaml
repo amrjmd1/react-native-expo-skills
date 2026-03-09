@@ -1,0 +1,4 @@
+interface:
+  display_name: "Expo Config Plugins Assistant"
+  short_description: "Expo Config Plugins Assistant"
+  default_prompt: "Use $expo-config-plugins to help with config plugins, app config, and prebuild-safe setup."

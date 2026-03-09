@@ -1,0 +1,4 @@
+interface:
+  display_name: "Expo Device Permissions Assistant"
+  short_description: "Expo Device Permissions Assistant"
+  default_prompt: "Use $expo-device-permissions to help with permission declarations and runtime request patterns."

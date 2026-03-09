@@ -1,0 +1,4 @@
+interface:
+  display_name: "RN Native Module Integration"
+  short_description: "RN Native Module Integration"
+  default_prompt: "Use $rn-native-module-integration to help with native module installation and bridge/debug flow."

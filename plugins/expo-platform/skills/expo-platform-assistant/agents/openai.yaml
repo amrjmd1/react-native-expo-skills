@@ -1,0 +1,4 @@
+interface:
+  display_name: "Expo Platform Assistant"
+  short_description: "Expo Platform Assistant"
+  default_prompt: "Use $expo-platform-assistant to help with Expo architecture, routing, and configuration in a production app."
