@@ -1,0 +1,6 @@
+{
+  "name": "mobile-platform-orchestrator",
+  "version": "1.0.0",
+  "description": "Single-entry orchestrator for React Native and Expo production workflows",
+  "author": { "name": "amr darwish", "email": "amrjmd1@gmail.com" }
+}

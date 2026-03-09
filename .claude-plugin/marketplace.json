@@ -9,6 +9,11 @@
   },
   "plugins": [
     {
+      "name": "mobile-platform-orchestrator",
+      "source": "./plugins/mobile-platform-orchestrator",
+      "description": "Single-entry orchestration skill for broad RN/Expo tasks with specialist routing."
+    },
+    {
       "name": "expo-platform",
       "source": "./plugins/expo-platform",
       "description": "Core Expo engineering skills for app architecture, EAS, updates, config, and permissions."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Platform Orchestrator"
+  short_description: "Single-entry senior mobile orchestration"
+  default_prompt: "Use $mobile-platform-orchestrator to triage and execute this React Native/Expo task with a production-safe plan."
