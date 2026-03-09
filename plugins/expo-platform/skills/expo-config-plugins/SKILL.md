@@ -1,74 +1,107 @@
 ---
 name: expo-config-plugins
-description: Guidance for Expo config and config plugins. Use when requests involve app.json/app.config.ts, plugin ordering, permissions declarations, native config side effects, prebuild behavior, and debugging config-generated native changes.
+description: Execution-grade skill for deterministic Expo config plugin design, ordering, and native side-effect control in managed and prebuild workflows.
+metadata:
+  domain: expo-platform
 ---
 
-# Expo Config Plugins Assistant
+# Skill: expo-config-plugins
 
-## Mission
-Keep Expo configuration deterministic, reviewable, and safe across iOS and Android builds.
+## Purpose
+Design and modify Expo config and config plugin behavior safely, with explicit native side effects, reproducible prebuild outcomes, and controlled plugin ordering.
 
-## Default Assumptions
-- Prefer `app.config.ts` for typed dynamic configuration.
-- Keep plugin list explicit and ordered intentionally.
-- Treat config changes as build-impacting unless proven otherwise.
+## When to Use
+- Editing `app.json` or `app.config.ts` with build-impacting changes.
+- Adding/removing/reordering config plugins.
+- Debugging native changes generated from config during prebuild.
+- Hardening permissions and native key declarations from config.
 
-## Config Workflow
-1. Identify required runtime behavior and affected platform keys.
-2. Apply minimal config/plugin changes.
-3. Explain generated native side effects.
-4. Specify rebuild requirements and verification steps.
+## When Not to Use
+- Runtime-only JavaScript logic with no config/native impact.
+- Bare-native direct edits that intentionally bypass Expo config generation.
 
-## Plugin Design Rules
-- Keep plugin options typed and documented.
-- Minimize hidden mutation; avoid broad plugin side effects.
-- Scope permissions to feature need.
-- Avoid duplicate or conflicting plugin entries.
+## Required Inputs
+- Project workflow: managed | prebuild | bare.
+- Config file source: `app.json` or `app.config.ts`.
+- Target platforms: iOS, Android.
+- Required native keys/permissions/capabilities.
+- Plugin list and current ordering.
+- Expected native side effects.
+- Rebuild constraints and CI environment.
 
-## Prebuild and Native Diff Discipline
-- Mention when `expo prebuild` must be re-run.
-- Mention when local native edits may be overwritten.
-- Encourage deterministic config over manual native patching.
+## Framework-Specific Directives
+- Expo Managed:
+  - Prefer `app.config.ts` for typed dynamic config.
+  - Keep plugin options explicit and minimal.
+- Expo + EAS:
+  - Validate env-driven config per profile (`development`, `preview`, `production`).
+  - Keep config deterministic across local and CI builds.
+- Bare React Native:
+  - Use config plugins only when still running prebuild flows.
+  - If native files are manually owned, document divergence from generated config.
+
+## Technical Implementation Patterns
+- Keep plugin sequence explicit; place conflicting plugins in known precedence order.
+- Scope plugin mutation narrowly to required native files/keys.
+- Version and type plugin options; avoid untyped dynamic option objects.
+- Describe generated native diff expectations before running prebuild.
+- Use a single source of truth for environment-conditioned values.
+
+## Anti-Patterns
+- Broad plugin side effects that mutate unrelated native config.
+- Duplicated or conflicting plugin declarations.
+- Implicit plugin ordering assumptions.
+- Editing generated native files without documenting prebuild overwrite risk.
+
+## Decision Tree
+- If change is runtime-only:
+  - Do not modify config/plugins.
+- If native capability requires declarative config key:
+  - Add key in app config and validate generated native output.
+- If multiple plugins touch same key:
+  - Resolve by explicit ordering and option scoping.
+- If environment-specific value is required:
+  - Use typed dynamic config with profile-aware inputs.
+
+## Execution Workflow
+1. Collect required inputs and assumptions.
+2. Identify target config keys and plugin touchpoints.
+3. Define plugin ordering and option contracts.
+4. Apply minimal config/plugin changes.
+5. Document expected native side effects.
+6. Run prebuild/build validation path.
+7. Verify iOS/Android outputs and runtime behavior.
+8. Produce structured output.
+
+## Edge Cases
+- Plugin order regression changes previously working key values.
+- Prebuild overwrites manual native patch unexpectedly.
+- Missing env var generates invalid config in CI.
+- Platform-specific config key applied to wrong platform.
+
+## Observability
+- Log config resolution source (`env`, default, static).
+- Track prebuild/plugin failures by plugin name and stage.
+- Capture build-time config validation errors with platform context.
 
 ## Output Contract
-Use sections in this order:
-- Config Goal
-- Proposed Config
-- Native Impact
-- Rebuild Steps
-- Verification
+- Context Summary
+- Assumptions
+- Architecture / Design
+- Implementation Steps
+- Verification Checklist
+- Risks / Rollback
+- Next Implementation Step
 
-## Safety Rules
-- Do not advise deleting generated native folders without context.
-- Do not assume plugin compatibility; call out uncertainty explicitly.
+## Verification Checklist
+- Frontmatter and plugin names are valid.
+- Plugin order is explicit and justified.
+- iOS/Android config outputs match intended native behavior.
+- Environment-specific values resolve deterministically.
+- Rebuild/prebuild requirements are stated.
 
-## Senior Execution Mode
-- Start by identifying system boundaries, assumptions, and risk level.
-- Prefer smallest safe change that can be validated quickly.
-- Keep recommendations production-focused: reliability, maintainability, and operational clarity.
-- Make platform differences explicit when behavior diverges between iOS and Android.
-
-## Decision Heuristics
-- Prefer deterministic and testable architectures over clever shortcuts.
-- Choose explicit typed contracts for all module boundaries.
-- Reject ambiguous state ownership; define single source of truth.
-- Prioritize debuggability and rollback safety for release-impacting changes.
-
-## Code Quality Gates
-- Enforce strict TypeScript (no implicit any, typed inputs/outputs).
-- Avoid hidden side effects and broad mutable shared state.
-- Keep components/services single-purpose and composable.
-- Prevent unnecessary re-renders by controlling subscription and prop surfaces.
-
-## Review Checklist
-- Correctness: Does the solution handle edge and failure states?
-- Scale: Does it remain maintainable as features grow?
-- Performance: Are hot paths optimized with measurable intent?
-- Operations: Can this be monitored, debugged, and rolled back safely?
-
-## Response Style
-Always provide:
-- clear problem framing,
-- actionable implementation,
-- verification steps,
-- one senior-level follow-up recommendation.
+## Risks / Rollback
+- Risk: plugin change breaks native build.
+  - Rollback: revert plugin delta and restore previous stable order/options.
+- Risk: env-conditioned config diverges across environments.
+  - Rollback: pin static fallback values and re-run profile validation.

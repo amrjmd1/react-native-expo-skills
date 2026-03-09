@@ -1,77 +1,107 @@
 ---
 name: expo-eas-release
-description: Release engineering guidance for Expo using EAS Build and EAS Submit. Use for build profiles, channel/branch strategy, credentials setup, CI/CD release automation, store submission readiness, rollout planning, and production release troubleshooting.
+description: Execution-grade skill for Expo EAS build, submit, and release orchestration with deterministic profile strategy, rollout control, and rollback readiness.
+metadata:
+  domain: expo-platform
 ---
 
-# Expo EAS Release Assistant
+# Skill: expo-eas-release
 
-## Mission
-Deliver predictable and reversible mobile releases using EAS Build, EAS Submit, and Expo Updates.
+## Purpose
+Define reliable Expo release operations across EAS Build, EAS Submit, and release rollout controls with explicit risk gates and rollback paths.
 
-## Default Assumptions
-- Maintain separate profiles for development, preview, and production.
-- Keep release configuration in version control (`eas.json`, app config).
-- Treat credentials and secrets as CI-managed, not hardcoded.
+## When to Use
+- Planning or executing mobile release pipelines with EAS.
+- Defining `eas.json` profile strategy and environment segregation.
+- Troubleshooting failed build/submit/release stages.
+- Hardening rollout and rollback procedures.
 
-## Release Workflow
-1. Validate build profile correctness and environment variables.
-2. Verify credentials/signing status for both stores.
-3. Produce exact commands for build, submit, and update.
-4. Define staged rollout and rollback plan.
-5. Define post-release verification checklist.
+## When Not to Use
+- Local development-only workflows with no release intent.
+- OTA-only strategy decisions without binary release coordination.
 
-## Build and Submission Guardrails
-- Keep profile intent explicit (`internal`, `simulator`, `store`).
-- Confirm runtime compatibility before publishing OTA updates.
-- Separate binary release risk from OTA release risk.
-- Prefer deterministic CI triggers over manual release commands.
+## Required Inputs
+- App identifiers and platform targets.
+- EAS profiles (`development`, `preview`, `production`).
+- Credential/signing ownership model.
+- Environment variable and secret mapping.
+- Release channel/branch strategy.
+- Store metadata readiness and submission constraints.
+- Rollout policy and rollback triggers.
 
-## Failure Triage
-- Classify failure as config, credentials, build-time native issue, or store metadata issue.
-- Identify first failing step and provide direct fix.
-- Provide minimal commands to re-run only failed stage.
+## Framework-Specific Directives
+- Expo Managed:
+  - Keep build profiles explicit and minimal.
+  - Treat managed config as source of truth for release inputs.
+- Expo + EAS:
+  - Separate secrets and endpoints per profile.
+  - Prefer CI-driven deterministic release commands.
+- Bare React Native:
+  - Validate native project parity with EAS profile expectations.
+  - Isolate native build failures before rerunning full release chain.
+
+## Technical Implementation Patterns
+- Define stage gates: config validation -> build -> submit -> rollout verification.
+- Use profile-specific build commands and immutable release metadata.
+- Separate binary risk decisions from OTA risk decisions.
+- Classify failures by stage and rerun minimal failing stage only.
+- Maintain release checklist artifacts for reproducibility.
+
+## Anti-Patterns
+- Running production release commands from ad-hoc local state.
+- Sharing credentials or secrets across environment scopes.
+- Coupling store submission and OTA rollout without verification gates.
+- Rebuilding all stages when only one stage failed.
+
+## Decision Tree
+- If config/credential validation fails:
+  - stop before build and fix inputs.
+- If build passes and submit fails:
+  - rerun submit stage only after metadata/credential fix.
+- If rollout metrics degrade:
+  - halt rollout and execute rollback.
+- If OTA compatibility is uncertain:
+  - block OTA publish until runtime compatibility is confirmed.
+
+## Execution Workflow
+1. Collect required inputs and assumptions.
+2. Validate profile, secrets, and credential readiness.
+3. Define release sequence and risk gates.
+4. Execute build commands per platform/profile.
+5. Execute submit commands per platform/profile.
+6. Run rollout verification checks.
+7. Trigger rollback if thresholds fail.
+8. Produce structured output.
+
+## Edge Cases
+- iOS builds pass while Android signing fails.
+- Store metadata rejection after successful binary upload.
+- CI profile misconfiguration uses wrong environment secrets.
+- Rollout regression appears after limited audience exposure.
+
+## Observability
+- Track build success/failure by profile and platform.
+- Track submit latency and rejection reason categories.
+- Track rollout health signals and rollback trigger counts.
 
 ## Output Contract
-Use sections in this order:
-- Release Risk
-- Release Plan
-- Commands
-- Verification
-- Rollback
+- Context Summary
+- Assumptions
+- Architecture / Design
+- Implementation Steps
+- Verification Checklist
+- Risks / Rollback
+- Next Implementation Step
 
-## Required Commands to Suggest When Relevant
-- `eas build --platform ios|android --profile <profile>`
-- `eas submit --platform ios|android --profile <profile>`
-- `eas update --branch <branch> --message "..."`
-- `eas channel:list` and `eas branch:list`
+## Verification Checklist
+- Profiles map correctly to environment intent.
+- Credentials and secrets resolve in CI.
+- Build and submit commands are deterministic.
+- Rollout and rollback criteria are explicit.
+- Post-release verification gates are defined.
 
-## Senior Execution Mode
-- Start by identifying system boundaries, assumptions, and risk level.
-- Prefer smallest safe change that can be validated quickly.
-- Keep recommendations production-focused: reliability, maintainability, and operational clarity.
-- Make platform differences explicit when behavior diverges between iOS and Android.
-
-## Decision Heuristics
-- Prefer deterministic and testable architectures over clever shortcuts.
-- Choose explicit typed contracts for all module boundaries.
-- Reject ambiguous state ownership; define single source of truth.
-- Prioritize debuggability and rollback safety for release-impacting changes.
-
-## Code Quality Gates
-- Enforce strict TypeScript (no implicit any, typed inputs/outputs).
-- Avoid hidden side effects and broad mutable shared state.
-- Keep components/services single-purpose and composable.
-- Prevent unnecessary re-renders by controlling subscription and prop surfaces.
-
-## Review Checklist
-- Correctness: Does the solution handle edge and failure states?
-- Scale: Does it remain maintainable as features grow?
-- Performance: Are hot paths optimized with measurable intent?
-- Operations: Can this be monitored, debugged, and rolled back safely?
-
-## Response Style
-Always provide:
-- clear problem framing,
-- actionable implementation,
-- verification steps,
-- one senior-level follow-up recommendation.
+## Risks / Rollback
+- Risk: profile drift causes wrong build artifacts.
+  - Rollback: restore known-good profile config and rebuild target platform only.
+- Risk: rollout causes production regression.
+  - Rollback: halt rollout, revert release path, and publish corrective update strategy.

@@ -1,69 +1,106 @@
 ---
 name: expo-updates-ota
-description: Guidance for Expo Updates (OTA) strategy and troubleshooting. Use for channels, branches, runtime versioning, rollout safety, compatibility policies, update observability, and debugging updates that fail to load or apply.
+description: Execution-grade skill for Expo OTA update strategy, compatibility controls, rollout safety, and incident rollback handling.
+metadata:
+  domain: expo-platform
 ---
 
-# Expo Updates OTA Assistant
+# Skill: expo-updates-ota
 
-## Mission
-Ship OTA updates safely with strict runtime compatibility and clear rollback paths.
+## Purpose
+Define safe Expo OTA release operations with strict runtime compatibility, controlled rollout, and deterministic rollback behavior.
 
-## Default Assumptions
-- Use branch/channel strategy per environment.
-- Keep runtime version policy explicit and documented.
-- Treat OTA as production release operations, not ad-hoc pushes.
+## When to Use
+- Designing channel/branch OTA strategy.
+- Publishing/promoting OTA updates across environments.
+- Hardening compatibility policy between binaries and updates.
+- Troubleshooting updates that fail to load/apply.
 
-## OTA Strategy Workflow
-1. Align runtime policy with binary compatibility boundaries.
-2. Define branch/channel topology.
-3. Produce publish and promote commands.
-4. Define verification gates and rollback trigger.
+## When Not to Use
+- Binary release pipeline tasks without OTA scope.
+- Runtime features unrelated to update distribution.
 
-## Compatibility Rules
-- Never publish updates across incompatible runtime boundaries.
-- Tie update cadence to release governance.
-- Prefer staged rollout before broad production exposure.
+## Required Inputs
+- Runtime version policy and compatibility rules.
+- Channel/branch topology by environment.
+- Target app binary versions in the field.
+- Rollout percentages and promotion policy.
+- Monitoring thresholds and rollback triggers.
+- Incident ownership and response path.
 
-## Incident Handling
-- Confirm update group metadata and channel mapping.
-- Isolate if issue is binary mismatch, branch routing, or asset/runtime crash.
-- Provide fast rollback command path.
+## Framework-Specific Directives
+- Expo Managed:
+  - Keep updates policy fully config-driven.
+  - Enforce runtime compatibility checks before publish.
+- Expo + EAS:
+  - Align branch/channel strategy with EAS release workflow.
+  - Keep env-specific update pipelines isolated.
+- Bare React Native:
+  - Validate Expo Updates integration and runtime mapping before rollout.
+  - Treat native binary compatibility as hard gate.
+
+## Technical Implementation Patterns
+- Maintain explicit runtime-version gating rules.
+- Use staged rollout then promotion, never full blast by default.
+- Separate publish, verify, and promote steps with stop conditions.
+- Keep rollback command path pre-defined and tested.
+- Capture update group metadata for incident triage.
+
+## Anti-Patterns
+- Publishing updates across incompatible runtime boundaries.
+- Promoting directly to production without staged verification.
+- Mixing staging and production channels.
+- Starting incident triage without update group/channel mapping.
+
+## Decision Tree
+- If runtime compatibility is uncertain:
+  - block publish.
+- If staged rollout metrics are healthy:
+  - promote incrementally.
+- If crash/error threshold breaches after publish:
+  - rollback immediately and pause promotion.
+- If issue source is channel routing mismatch:
+  - fix routing and re-verify before new publish.
+
+## Execution Workflow
+1. Collect required inputs and assumptions.
+2. Validate runtime compatibility and environment mapping.
+3. Define channel/branch rollout design.
+4. Publish OTA to target branch.
+5. Verify telemetry and runtime health gates.
+6. Promote gradually to broader channels.
+7. Execute rollback if thresholds fail.
+8. Produce structured output.
+
+## Edge Cases
+- Binary in field cannot accept latest OTA runtime.
+- Incorrect channel mapping exposes update to wrong audience.
+- Asset/runtime crash appears only after promotion.
+- Rollback command succeeds but clients cache stale update state.
+
+## Observability
+- Track OTA adoption rate by runtime version.
+- Track update load/apply failures by channel and platform.
+- Track rollback trigger frequency and time-to-rollback.
 
 ## Output Contract
-Use sections in this order:
-- Compatibility Assessment
-- Rollout Plan
-- Commands
-- Monitoring Checks
-- Rollback Procedure
+- Context Summary
+- Assumptions
+- Architecture / Design
+- Implementation Steps
+- Verification Checklist
+- Risks / Rollback
+- Next Implementation Step
 
-## Senior Execution Mode
-- Start by identifying system boundaries, assumptions, and risk level.
-- Prefer smallest safe change that can be validated quickly.
-- Keep recommendations production-focused: reliability, maintainability, and operational clarity.
-- Make platform differences explicit when behavior diverges between iOS and Android.
+## Verification Checklist
+- Runtime compatibility gate is enforced.
+- Channel/branch mapping is correct for each environment.
+- Staged rollout and promotion gates are defined.
+- Monitoring thresholds and rollback triggers are explicit.
+- Rollback procedure is executable and tested.
 
-## Decision Heuristics
-- Prefer deterministic and testable architectures over clever shortcuts.
-- Choose explicit typed contracts for all module boundaries.
-- Reject ambiguous state ownership; define single source of truth.
-- Prioritize debuggability and rollback safety for release-impacting changes.
-
-## Code Quality Gates
-- Enforce strict TypeScript (no implicit any, typed inputs/outputs).
-- Avoid hidden side effects and broad mutable shared state.
-- Keep components/services single-purpose and composable.
-- Prevent unnecessary re-renders by controlling subscription and prop surfaces.
-
-## Review Checklist
-- Correctness: Does the solution handle edge and failure states?
-- Scale: Does it remain maintainable as features grow?
-- Performance: Are hot paths optimized with measurable intent?
-- Operations: Can this be monitored, debugged, and rolled back safely?
-
-## Response Style
-Always provide:
-- clear problem framing,
-- actionable implementation,
-- verification steps,
-- one senior-level follow-up recommendation.
+## Risks / Rollback
+- Risk: incompatible update causes startup/runtime failure.
+  - Rollback: revert to last stable update group and pause promotion.
+- Risk: channel misrouting affects unintended users.
+  - Rollback: restore prior channel mapping and republish corrected target.
