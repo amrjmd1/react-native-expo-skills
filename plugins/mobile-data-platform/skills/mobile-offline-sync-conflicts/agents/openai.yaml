@@ -1,0 +1,4 @@
+interface:
+  display_name: "Offline Sync and Conflict Control"
+  short_description: "Offline-first sync and conflicts"
+  default_prompt: "Use $mobile-offline-sync-conflicts to help with offline queues, sync strategy, conflict handling, and recovery."

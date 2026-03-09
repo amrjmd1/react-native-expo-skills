@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Monorepo Package Architecture"
+  short_description: "Workspaces, shared libs, and versioning"
+  default_prompt: "Use $mobile-monorepo-package-architecture to help with workspace layout, shared packages, and version governance."

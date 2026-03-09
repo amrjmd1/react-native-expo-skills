@@ -1,39 +1,45 @@
 # Mobile Advanced Controls Plugin
 
-Focused micro-skill pack for advanced control of architecture quality, UX reliability, and performance in React Native/Expo apps.
+Focused micro-skill pack for high-precision architecture and quality control.
 
-## Skills Included
+## Scope
+
+Use this pack when teams need specialist guidance for state, navigation, forms, animation, testing, and list scalability.
+
+## Skills
 
 1. `rn-state-management-architecture`
-Use for: server/client/UI state boundaries, store/query design, scalable state ownership.
+State ownership and store/query boundary design.
 
 2. `rn-navigation-architecture`
-Use for: route hierarchy, typing, auth gating, deep link reliability.
+Typed routing, auth gating, deep-link reliability.
 
 3. `rn-forms-validation`
-Use for: schema-driven forms, typed validation, reusable field primitives.
+Schema-first forms, validation contracts, reusable input systems.
 
 4. `rn-animations-reanimated`
-Use for: gesture-driven motion, transition architecture, animation performance safety.
+Motion architecture and performance-safe interaction patterns.
 
 5. `rn-testing-quality-gates`
-Use for: test strategy, CI gates, flaky-test reduction, regression prevention.
+Test strategy, CI quality gates, flake reduction controls.
 
 6. `rn-list-performance-control`
-Use for: FlatList/virtualization tuning, pagination stability, render bottleneck reduction.
+Virtualization, pagination reliability, render-path optimization.
 
-## When To Install This Pack
+## Typical Senior Use Cases
 
-Install when your team needs high-granularity skill routing for specific technical domains instead of one broad assistant.
+- Prevent state sprawl and invalid cache ownership.
+- Harden deep-link and nested navigation flows.
+- Build reliable form systems with clear error UX.
+- Stop performance regressions in list-heavy screens.
 
-## Typical Questions This Pack Handles Well
+## Routing Guidance
 
-- "Which state tool belongs to which state category in this app?"
-- "How should we type and test navigation/deep-link flows?"
-- "How do we prevent list performance regressions at scale?"
-- "How do we create CI quality gates that catch real mobile regressions?"
+- Keep this pack installed with core Expo/CLI packs.
+- Use these skills for deep domain interventions, not broad orchestration.
 
-## Usage Notes
+## Quality Bar
 
-- These skills are intentionally narrow and composable.
-- They are best used together with `expo-platform` or `react-native-cli-platform`.
+- Explicit contracts and deterministic behavior.
+- Measurable performance and quality outcomes.
+- Low-overlap skill boundaries for cleaner auto-routing.

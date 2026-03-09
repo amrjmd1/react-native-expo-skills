@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Observability Telemetry"
+  short_description: "Logging, crash, analytics standards"
+  default_prompt: "Use $mobile-observability-telemetry to help with logging, crash analytics, and instrumentation architecture."

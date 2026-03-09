@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Realtime WebSocket Patterns"
+  short_description: "WebSocket and realtime architecture"
+  default_prompt: "Use $mobile-realtime-websocket to help with realtime channel lifecycle, reconnection, and message consistency."

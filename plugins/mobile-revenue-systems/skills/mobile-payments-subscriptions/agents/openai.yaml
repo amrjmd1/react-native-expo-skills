@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Payments and Subscriptions"
+  short_description: "Payments and subscription lifecycle"
+  default_prompt: "Use $mobile-payments-subscriptions to help with in-app purchases, subscription lifecycle, and entitlement consistency."

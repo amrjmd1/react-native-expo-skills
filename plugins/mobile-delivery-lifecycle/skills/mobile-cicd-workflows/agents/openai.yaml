@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile CI/CD Workflows"
+  short_description: "Dedicated CI/CD playbooks"
+  default_prompt: "Use $mobile-cicd-workflows to help with pipeline design, release gating, and deterministic mobile delivery."

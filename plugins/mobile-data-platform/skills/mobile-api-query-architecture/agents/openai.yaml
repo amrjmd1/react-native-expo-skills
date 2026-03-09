@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile API Query Architecture"
+  short_description: "API layering and query strategy"
+  default_prompt: "Use $mobile-api-query-architecture to help with typed API clients, query patterns, retries, and cache boundaries."

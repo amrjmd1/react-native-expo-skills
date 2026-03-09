@@ -1,0 +1,4 @@
+interface:
+  display_name: "Biometric and Secure Storage"
+  short_description: "Biometrics and secure storage flows"
+  default_prompt: "Use $mobile-biometric-secure-storage to help with biometric authentication and secure local credential storage."

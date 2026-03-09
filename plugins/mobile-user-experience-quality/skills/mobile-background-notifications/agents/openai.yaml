@@ -1,0 +1,4 @@
+interface:
+  display_name: "Background Tasks and Notifications"
+  short_description: "Background jobs and push workflows"
+  default_prompt: "Use $mobile-background-notifications to help with background task design, push pipeline, and delivery reliability."

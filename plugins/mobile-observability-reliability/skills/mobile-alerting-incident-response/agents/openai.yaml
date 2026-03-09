@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Alerting and Incident Response"
+  short_description: "Alert policy and incident runbooks"
+  default_prompt: "Use $mobile-alerting-incident-response to help with alerting strategy, incident triage, and rollback runbooks."

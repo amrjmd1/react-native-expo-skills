@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Migration and Upgrades"
+  short_description: "RN/Expo major upgrade playbooks"
+  default_prompt: "Use $mobile-migration-upgrades to help with major RN/Expo upgrade planning and execution."

@@ -7,6 +7,42 @@ A public multi-plugin skill repository for AI coding agents, structured similarl
 - `expo-platform`: Expo architecture, EAS release, config plugins, OTA, permissions.
 - `react-native-cli-platform`: bare RN CLI, native integration, signing, profiling.
 - `mobile-advanced-controls`: state, navigation, forms, animation, testing, list performance.
+- `mobile-identity-security`: auth lifecycle, secure storage, biometrics, session hardening.
+- `mobile-data-platform`: API/query architecture, offline sync/conflicts, websocket/realtime.
+- `mobile-observability-reliability`: telemetry, crash analytics, alerting, incident response.
+- `mobile-platform-architecture`: monorepo/workspaces, shared UI kits, package versioning.
+- `mobile-user-experience-quality`: accessibility, i18n/l10n, background tasks, notifications.
+- `mobile-revenue-systems`: payments, subscriptions, entitlements, billing recovery.
+- `mobile-delivery-lifecycle`: CI/CD workflows and RN/Expo migration/upgrade playbooks.
+
+## Skill Coverage Matrix
+
+- Architecture Core: `expo-platform`, `react-native-cli-platform`, `mobile-platform-architecture`
+- Product Quality: `mobile-advanced-controls`, `mobile-user-experience-quality`
+- Data and Reliability: `mobile-data-platform`, `mobile-observability-reliability`
+- Security and Revenue: `mobile-identity-security`, `mobile-revenue-systems`
+- Delivery and Evolution: `mobile-delivery-lifecycle`
+
+## Recommended Install Paths
+
+1. Expo production teams:
+   - `expo-platform`
+   - `mobile-advanced-controls`
+   - `mobile-identity-security`
+   - `mobile-data-platform`
+   - `mobile-observability-reliability`
+   - `mobile-delivery-lifecycle`
+
+2. Bare RN CLI production teams:
+   - `react-native-cli-platform`
+   - `mobile-advanced-controls`
+   - `mobile-identity-security`
+   - `mobile-data-platform`
+   - `mobile-observability-reliability`
+   - `mobile-delivery-lifecycle`
+
+3. Full enterprise stack:
+   - all plugin packs
 
 ## Installation
 
@@ -24,6 +60,13 @@ A public multi-plugin skill repository for AI coding agents, structured similarl
 /plugin install expo-platform
 /plugin install react-native-cli-platform
 /plugin install mobile-advanced-controls
+/plugin install mobile-identity-security
+/plugin install mobile-data-platform
+/plugin install mobile-observability-reliability
+/plugin install mobile-platform-architecture
+/plugin install mobile-user-experience-quality
+/plugin install mobile-revenue-systems
+/plugin install mobile-delivery-lifecycle
 ```
 
 ### Cursor
@@ -69,4 +112,4 @@ Stay in touch:
 ## Support
 
 If this project helps you, you can support my work:
-- Buy Me a Coffee: [buymeacoffee.com/devamrdar](https://buymeacoffee.com/devamrdar)
+- Buy Me a Coffee: [buymeacoffee.com/devamrdar](https://buymeacoffee.com/devamrdar) ☕️

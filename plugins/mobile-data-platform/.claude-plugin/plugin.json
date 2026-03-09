@@ -1,0 +1,6 @@
+{
+  "name": "mobile-data-platform",
+  "version": "1.0.0",
+  "description": "Data architecture, offline sync, and realtime skills",
+  "author": { "name": "amr darwish", "email": "amrjmd1@gmail.com" }
+}

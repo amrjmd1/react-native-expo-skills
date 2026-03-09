@@ -22,6 +22,41 @@
       "name": "mobile-advanced-controls",
       "source": "./plugins/mobile-advanced-controls",
       "description": "Focused advanced skills for state, navigation, forms, animations, testing, and list performance."
+    },
+    {
+      "name": "mobile-identity-security",
+      "source": "./plugins/mobile-identity-security",
+      "description": "Authentication, token lifecycle, secure storage, and biometric control skills."
+    },
+    {
+      "name": "mobile-data-platform",
+      "source": "./plugins/mobile-data-platform",
+      "description": "API/query architecture, offline sync/conflict, and realtime communication skills."
+    },
+    {
+      "name": "mobile-observability-reliability",
+      "source": "./plugins/mobile-observability-reliability",
+      "description": "Logging, crash analytics, alerting policy, and incident response skills."
+    },
+    {
+      "name": "mobile-platform-architecture",
+      "source": "./plugins/mobile-platform-architecture",
+      "description": "Monorepo, shared packages, UI kit boundaries, and versioning strategy skills."
+    },
+    {
+      "name": "mobile-user-experience-quality",
+      "source": "./plugins/mobile-user-experience-quality",
+      "description": "Accessibility, internationalization, background tasks, and notifications skills."
+    },
+    {
+      "name": "mobile-revenue-systems",
+      "source": "./plugins/mobile-revenue-systems",
+      "description": "Payments, subscriptions, entitlements, and billing recovery skills."
+    },
+    {
+      "name": "mobile-delivery-lifecycle",
+      "source": "./plugins/mobile-delivery-lifecycle",
+      "description": "CI/CD workflow engineering and React Native/Expo migration playbook skills."
     }
   ]
 }

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Auth Session Security"
+  short_description: "Token lifecycle and session security"
+  default_prompt: "Use $mobile-auth-session-security to help with authentication architecture, token lifecycle, and secure session flows."

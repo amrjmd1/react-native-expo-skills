@@ -1,37 +1,42 @@
 # Expo Platform Plugin
 
-Senior Expo-focused skill pack for teams using Expo managed workflow at production scale.
+Senior Expo-first implementation pack for production mobile teams.
 
-## Skills Included
+## Scope
+
+Use this pack for managed-workflow architecture, config correctness, OTA strategy, permissions, and EAS release operations.
+
+## Skills
 
 1. `expo-platform-assistant`
-Use for: overall Expo architecture, routing, feature design, and refactors.
+Primary Expo orchestrator for architecture and cross-domain delivery decisions.
 
 2. `expo-eas-release`
-Use for: EAS build/submit strategy, release risk management, rollout/rollback.
+Release engineering for EAS Build/Submit, rollout policy, and rollback readiness.
 
 3. `expo-config-plugins`
-Use for: app config, plugin ordering, prebuild impacts, native side effects.
+Typed app config and config-plugin design with prebuild/native side-effect awareness.
 
 4. `expo-updates-ota`
-Use for: channels/branches, runtime compatibility, OTA safety operations.
+Channel/branch/runtime strategy for safe OTA release operations.
 
 5. `expo-device-permissions`
-Use for: permissions declarations, runtime checks, denied-state UX.
+Permission declarations, runtime request strategy, denied-state UX handling.
 
-## When To Install This Pack
+## Typical Senior Use Cases
 
-Install when your project primarily runs on Expo and you need high-confidence guidance for delivery, runtime behavior, and config correctness.
+- Stabilize release flow across preview/staging/production channels.
+- Diagnose config plugin conflicts and prebuild drift.
+- Design OTA strategy with strict binary compatibility controls.
+- Harden permission UX against denial and platform edge cases.
 
-## Typical Questions This Pack Handles Well
+## Routing Guidance
 
-- "How should we structure a large Expo app with typed boundaries?"
-- "Why is this EAS build failing only on iOS?"
-- "How do we safely roll out OTA updates with rollback guarantees?"
-- "Which permission keys and runtime flows are required for camera + location?"
+- Use this pack as default for Expo projects.
+- Route security/data/reliability concerns into dedicated production packs when deeper controls are required.
 
-## Usage Notes
+## Quality Bar
 
-- This pack assumes strict TypeScript and iOS/Android targets.
-- Skills in this pack prioritize production-safe defaults.
-- When a task needs native-only behavior, skills should call that out explicitly.
+- Strict TypeScript contracts.
+- Explicit managed vs native boundary decisions.
+- Production-safe defaults and validation-first rollout guidance.

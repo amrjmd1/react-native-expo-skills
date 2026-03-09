@@ -1,33 +1,39 @@
 # React Native CLI Platform Plugin
 
-Senior skill pack for bare React Native CLI projects with native module and build complexity.
+Senior bare React Native CLI pack for native-heavy projects.
 
-## Skills Included
+## Scope
+
+Use this pack for JS/native boundary diagnosis, native module integration, release signing, and performance profiling.
+
+## Skills
 
 1. `react-native-cli-platform-assistant`
-Use for: baseline architecture, JS/native boundary issues, platform-level debugging.
+Primary CLI orchestrator for architecture and multi-layer troubleshooting.
 
 2. `rn-native-module-integration`
-Use for: native SDK/module setup, Podfile/Gradle changes, bridge-safe wrappers.
+Native SDK/module integration with deterministic setup order and typed wrappers.
 
 3. `rn-build-signing`
-Use for: release signing, certificates/keystores, CI secret wiring, store artifacts.
+Release build signing, CI secret handling, store artifact readiness.
 
 4. `rn-performance-profiling`
-Use for: startup/render/memory bottlenecks and measurable optimization workflows.
+Measured performance diagnosis and optimization verification.
 
-## When To Install This Pack
+## Typical Senior Use Cases
 
-Install when you have direct native folders and need reliable guidance across Xcode, Gradle, Metro, and React Native runtime behavior.
+- Resolve iOS/Android native build failures with root-cause isolation.
+- Introduce native SDKs safely without long-term config drift.
+- Standardize release signing between local and CI.
+- Build measurable optimization plans for rendering and memory bottlenecks.
 
-## Typical Questions This Pack Handles Well
+## Routing Guidance
 
-- "How do we integrate this native SDK correctly on both platforms?"
-- "Why does release signing work locally but fail in CI?"
-- "How do we profile frame drops and verify improvements?"
-- "What is the safest migration plan for RN native config changes?"
+- Use this pack for projects with direct `ios/` and `android/` ownership.
+- Route delivery/security/data concerns into dedicated production packs when needed.
 
-## Usage Notes
+## Quality Bar
 
-- This pack assumes reproducible build processes and CI parity.
-- Skills emphasize minimal native diffs and explicit verification commands.
+- Minimal native diff footprint.
+- Clear rebuild and verification commands.
+- CI-parity and repeatable release procedures.

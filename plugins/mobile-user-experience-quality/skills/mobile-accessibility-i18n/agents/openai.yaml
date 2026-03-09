@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Accessibility and i18n"
+  short_description: "Accessibility and localization systems"
+  default_prompt: "Use $mobile-accessibility-i18n to help with a11y compliance, localization architecture, and RTL/dynamic type support."
