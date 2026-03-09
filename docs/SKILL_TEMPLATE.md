@@ -23,6 +23,15 @@ Field rules:
 - **description**: one concise sentence describing what the skill executes (not a generic definition).
 - **metadata.domain**: logical grouping such as `mobile-identity-security`, `mobile-networking`, `mobile-performance`, etc. This must be placed inside the supported `metadata` field.
 
+### Skill Naming Convention
+
+- Use lowercase, hyphen-separated identifiers only.
+- Keep names stable once published.
+- Prefer domain-explicit patterns such as:
+  - `mobile-auth-session-security`
+  - `mobile-biometric-secure-storage`
+  - `mobile-oauth-session-flow`
+
 Example:
 
 ```yaml

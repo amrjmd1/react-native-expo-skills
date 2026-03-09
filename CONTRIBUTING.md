@@ -15,6 +15,20 @@ This repository publishes installable mobile skill plugins. Keep changes focused
 - Keep each skill focused on one domain/problem class.
 - Prefer explicit workflows and output contracts over vague advice.
 - Keep recommendations compatible with current Expo/RN practices.
+- Keep skills deterministic and execution-oriented, not generic documentation.
+- Use only supported frontmatter fields in `SKILL.md`:
+  - `name`
+  - `description`
+  - `metadata.domain`
+
+## Skill Workflow (Required)
+
+Use this repository's skill workflow docs for every new or updated skill:
+
+1. Start from [`docs/SKILL_TEMPLATE.md`](docs/SKILL_TEMPLATE.md).
+2. Review against [`docs/SKILL_REVIEW_CHECKLIST.md`](docs/SKILL_REVIEW_CHECKLIST.md).
+3. Score with [`docs/SKILL_SCORING.md`](docs/SKILL_SCORING.md).
+4. Keep the final skill concise, deterministic, and implementation-focused.
 
 ## Updating or Adding a Skill
 
