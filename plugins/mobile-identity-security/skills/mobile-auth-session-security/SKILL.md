@@ -1,3 +1,10 @@
+---
+name: mobile-auth-session-security
+description: Execution-grade skill for designing secure token lifecycle and session integrity in React Native and Expo apps.
+metadata:
+  domain: mobile-identity-security
+---
+
 # Skill: mobile-auth-session-security
 
 ## Purpose

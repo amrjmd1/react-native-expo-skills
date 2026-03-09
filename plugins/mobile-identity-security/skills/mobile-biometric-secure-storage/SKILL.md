@@ -1,6 +1,8 @@
 ---
 name: mobile-biometric-secure-storage
 description: Execution-grade skill for secure local secret handling and biometric re-auth in React Native and Expo apps. Use for storage boundary design, biometric gate policy, fallback auth flow, lifecycle failure handling, and platform-specific hardening across Expo managed, Expo + EAS, and bare React Native.
+metadata:
+  domain: mobile-identity-security
 ---
 
 # Skill: mobile-biometric-secure-storage

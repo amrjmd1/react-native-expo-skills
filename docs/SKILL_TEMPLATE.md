@@ -1,3 +1,41 @@
+---
+
+## Required Skill Metadata
+
+Every skill must begin with a YAML frontmatter block that describes the skill.
+
+This metadata allows tools, agents, and future automation to discover and index skills.
+
+Required fields:
+
+```yaml
+---
+name: <skill-id>
+description: <short execution-focused description>
+metadata:
+  domain: <skill-domain>
+---
+```
+
+Field rules:
+
+- **name**: stable identifier using lowercase and hyphen-separated words.
+- **description**: one concise sentence describing what the skill executes (not a generic definition).
+- **metadata.domain**: logical grouping such as `mobile-identity-security`, `mobile-networking`, `mobile-performance`, etc. This must be placed inside the supported `metadata` field.
+
+Example:
+
+```yaml
+---
+name: mobile-auth-session-security
+description: Execution-grade skill for designing secure token lifecycle and session integrity in React Native and Expo apps.
+metadata:
+  domain: mobile-identity-security
+---
+```
+
+---
+
 # SKILL_TEMPLATE
 
 This template defines the required structure for every skill in this repository.
@@ -7,6 +45,15 @@ All skills must follow this format to ensure consistency, quality, and reliable 
 Do not remove sections unless there is a strong technical reason.
 
 ---
+
+```yaml
+---
+name: <skill-id>
+description: <short execution description>
+metadata:
+  domain: <skill-domain>
+---
+```
 
 # Skill: <skill-name>
 
