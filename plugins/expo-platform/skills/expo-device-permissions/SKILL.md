@@ -1,6 +1,6 @@
 ---
 name: expo-device-permissions
-description: Execution-grade skill for implementing Expo device permission flows with deterministic runtime checks, denied-state handling, and platform-safe declarations.
+description: Execution-grade skill for safe Expo device permission architecture including declaration correctness, runtime request strategy, denied-state UX, and store compliance.
 metadata:
   domain: expo-platform
 ---
@@ -21,87 +21,135 @@ Implement production-safe permission architecture for Expo apps with explicit ru
 - Backend authorization or role-based access unrelated to device permissions.
 
 ## Required Inputs
-- Feature-to-permission matrix.
-- Target platforms and OS minimum versions.
-- Runtime permission APIs used.
-- Required config declarations and usage descriptions.
-- Denied/permanently-denied UX policy.
-- Background permission requirements.
+- Target platform: `ios` | `android` | `both`.
+- Feature requiring permission and whether permission is required vs optional.
+- Permission type(s): camera, microphone, location (foreground/background), notifications, media, sensors, contacts, etc.
+- Declaration location and owner: Expo config/plugin vs native config overlays.
+- Runtime request strategy: trigger point, rationale copy, pre-check policy.
+- Denied/permanently-denied/restricted UX flow.
+- Feature fallback/degradation behavior when unavailable.
+- Store compliance constraints (purpose strings, policy-sensitive permissions, review notes).
+- Platform-specific permission behavior differences and OS version constraints.
+- Permission retry policy (timing, limits, settings redirect policy).
+- Permission state caching/tracking strategy.
 - Analytics/logging constraints for permission outcomes.
 
 ## Framework-Specific Directives
 - Expo Managed:
-  - Use Expo API permission modules and config fields only.
-  - Request contextually at point-of-need.
+  - Declare required permissions in Expo config before any runtime request path.
+  - Use Expo permission APIs and request only after clear user intent.
+  - Keep usage-description copy accurate and policy-safe per permission.
 - Expo + EAS:
-  - Validate permission copy/config across profiles and release channels.
-  - Ensure build-time config is stable in CI.
-- Bare React Native:
-  - Keep permission wrappers platform-aware and isolated from UI components.
-  - Align native manifest/plist changes with runtime request logic.
+  - Validate permission declarations/copy per profile and release channel.
+  - Keep permission-related config deterministic across local and CI builds.
+  - Treat CI as source of truth for release-bound permission config validation.
+- Bare React Native with Expo APIs:
+  - Keep Expo permission API wrappers platform-aware and isolated from UI components.
+  - Align Info.plist/AndroidManifest declarations with runtime request logic.
+  - Do not request permissions not declared in final native config artifacts.
 
 ## Technical Implementation Patterns
-- Centralize permission status enums and wrapper functions.
-- Separate `check` and `request` operations.
-- Persist last-known status for UX branching, not for security authorization.
-- Gate background-dependent features behind explicit secondary checks.
-- Route permanently-denied state to settings deep-link flow.
+- Permission gating architecture:
+  - Gate feature entry on typed permission state (`granted`, `denied`, `blocked`, `restricted`, `unavailable`).
+- Lazy request strategy:
+  - Trigger permission request from explicit user action at point-of-need.
+- Denied-state fallback UX:
+  - Provide alternate flow, explanation, and next action for denied/blocked states.
+- Feature degradation pattern:
+  - Disable only permission-dependent sub-features; preserve non-dependent paths.
+- Permission state tracking:
+  - Centralize `check` and `request` wrappers with stable status mapping per platform.
+- Platform-specific handling:
+  - Implement platform branches for behavior differences (e.g., notifications, background location).
+- Request throttling:
+  - Limit repeated prompts and debounce repeated requests from rapid UI interactions.
+- Retry UX:
+  - Allow user-initiated retry with contextual guidance; use settings deep-link for permanently denied.
 
 ## Anti-Patterns
-- Requesting all permissions at app startup.
-- Repeated prompt loops after OS denial.
-- Hardcoded string comparisons for permission status.
-- Mixing permission logic directly inside UI view rendering.
+- Requesting permissions on app launch without context.
+- Declaring permissions not used by shipped features.
+- Failing to handle denied/restricted/permanently denied states.
+- Assuming permission behavior is identical across iOS and Android.
+- Requesting multiple unrelated permissions in one flow.
+- Ignoring store policy requirements for sensitive permissions.
+- Mixing permission logic directly into UI rendering without centralized wrappers.
 
 ## Decision Tree
-- If permission status is granted:
+- If permission is already granted:
   - Execute feature path.
-- If status is denied and requestable:
-  - Show rationale and request once at point-of-need.
-- If status is permanently denied:
-  - Present settings recovery path.
-- If background permission is required but foreground missing:
-  - Block background enablement and request foreground first.
+- If permission is not granted and requestable:
+  - Show rationale and request at user intent boundary.
+- If permission is denied:
+  - Offer retry path if feature is required; otherwise continue with fallback.
+- If permission is permanently denied/blocked:
+  - Route to settings recovery flow and fallback UX.
+- If permission is restricted by policy/device controls:
+  - Skip request loop and present non-retryable fallback messaging.
+- If permission is required for core feature:
+  - Block protected action until permission granted or user exits flow.
+- If permission is optional:
+  - Degrade feature and continue app flow.
+- If platform behavior diverges:
+  - Use platform-specific branch and validate separately.
 
 ## Execution Workflow
 1. Collect required inputs and assumptions.
-2. Build permission matrix by feature and platform.
-3. Define typed status model and wrapper API.
-4. Implement request/check flow with denied-state UX.
-5. Add config declarations and usage descriptions.
-6. Validate platform differences and background behavior.
-7. Verify logging/analytics for outcomes.
-8. Produce structured output.
+2. Classify permission type and feature dependency.
+3. Validate permission declaration location and correctness.
+4. Define runtime request trigger and rationale UX.
+5. Design denied-state and permanently-denied fallback flows.
+6. Implement permission state tracking and request throttling.
+7. Test platform-specific behavior and edge states.
+8. Verify store compliance constraints and copy.
+9. Monitor permission-related failures and denial loops.
+10. Produce structured output.
 
 ## Edge Cases
-- OS returns limited/provisional permissions.
-- Permission revoked in settings while app is backgrounded.
-- Background permission requested before foreground grant.
-- Notifications allowed on one platform but blocked on another.
+- Permission denied permanently by user.
+- Permission restricted by device policy/parental controls/MDM.
+- Permission revoked after app installation.
+- User enables permission in settings and returns to app.
+- Permission request fails due to platform bug/transient OS error.
+- Permission available on one platform but unavailable on another.
+- Permission granted but feature fails due to hardware constraints.
+- OS returns limited/provisional permission states.
+- Background permission requested before prerequisite foreground grant.
 
 ## Observability
-- Track permission request attempt count by feature.
-- Track status transitions (`unknown -> denied -> granted`).
-- Track settings-recovery flow completion rate.
+- Track permission request rate and grant/deny/blocked/restricted outcome rates by feature.
+- Monitor feature failures attributable to missing permission state.
+- Detect repeated denial loops and repeated prompt attempts.
+- Log request context (feature, platform, trigger point) and outcome status.
+- Monitor permission-related crashes and recovery success after settings deep-link.
+- Never log sensitive user data.
 
 ## Output Contract
 - Context Summary
 - Assumptions
-- Architecture / Design
-- Implementation Steps
-- Verification Checklist
+- Permission Model
+- Runtime Request Strategy
+- Denied-State UX
+- Feature Fallback Strategy
+- Store Compliance Considerations
+- Verification Plan
 - Risks / Rollback
 - Next Implementation Step
 
 ## Verification Checklist
-- Permission matrix matches feature requirements.
-- iOS/Android declarations and runtime requests are aligned.
-- Denied and permanently-denied flows are implemented.
-- Background-dependent permissions enforce prerequisite checks.
-- Permission wrappers are typed and deterministic.
+- Permission matrix matches feature dependency and platform scope.
+- Declarations exist before runtime requests on each platform.
+- iOS/Android runtime behavior differences are explicitly handled.
+- Denied, blocked, restricted, and permanently-denied flows are implemented.
+- Fallback strategy works for required vs optional features.
+- Request throttling prevents prompt loops.
+- Store policy-sensitive permissions have compliant usage copy and rationale.
+- Permission wrappers and state mapping are typed and deterministic.
 
 ## Risks / Rollback
 - Risk: over-requesting harms conversion.
   - Rollback: reduce requests to point-of-need only.
 - Risk: incorrect denied-state branching breaks feature access.
   - Rollback: revert to last stable wrapper and UX path.
+- Risk: store rejection due to inaccurate permission declarations/copy.
+  - Rollback: revert to policy-compliant declaration set and resubmit with corrected metadata.
