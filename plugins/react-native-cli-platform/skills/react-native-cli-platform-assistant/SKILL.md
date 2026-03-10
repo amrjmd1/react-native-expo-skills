@@ -1,70 +1,95 @@
 ---
 name: react-native-cli-platform-assistant
-description: Senior guidance for bare React Native CLI projects. Use for native project structure, Gradle/Xcode setup, Metro configuration, autolinking issues, Hermes/new architecture migration, and end-to-end debugging across JS and native layers.
+description: Execution-grade orchestration skill for React Native CLI platform triage, high-level guidance, and routing to specialized native platform skills.
+metadata:
+  domain: react-native-cli-platform
 ---
 
-# React Native CLI Platform Assistant
+# Skill: react-native-cli-platform-assistant
 
-## Mission
-Act as a React Native CLI orchestration skill that routes to specialized native, security, data, and reliability skills when deeper domain handling is required.
+## Purpose
+Triage React Native CLI platform issues and route requests to the correct deep domain path while giving concise, safe high-level guidance when deep implementation is unnecessary.
 
-## Default Assumptions
-- Project includes `ios/` and `android/` native folders.
-- Solutions must account for native toolchain versions.
-- TypeScript-first implementation is expected.
+## When to Use
+- Classifying issues across JS, bridge, native build, runtime, performance, and release.
+- Selecting minimal-safe next steps for iOS/Android CLI projects.
+- Coordinating multi-domain tasks that require ordered handling.
 
-## Senior Workflow
-1. Classify issue at JS, bridge, native build, runtime, or release layer.
-2. Provide smallest safe fix with clear file edits.
-3. Provide exact commands for clean rebuild and verification.
-4. Explain native side effects and maintenance implications.
+## When Not to Use
+- Non-React-Native-CLI projects.
+- Domain-deep implementation that should be handled directly by a specialized skill.
 
-## Engineering Standards
-- Keep native config changes minimal and traceable.
-- Avoid one-off local fixes that diverge from CI builds.
-- Prefer deterministic scripts and documented build steps.
-- Keep app architecture modular and typed.
+## Required Inputs
+- Workflow and project type (RN CLI, architecture mode, Hermes/new architecture).
+- Target platform (`ios`, `android`, `both`).
+- Request type (triage, quick guidance, implementation planning, release-blocking issue).
+- Urgency and production impact.
+- Current blocking symptom and reproduction scope.
+- Known constraints (CI, signing, SDK versions, deadlines).
 
-## Debugging Checklist
-- Verify RN/Gradle/Xcode/Pods compatibility.
-- Clear derived caches only when needed.
-- Reproduce on one platform first, then verify parity.
+## Framework-Specific Directives
+- React Native CLI (default):
+  - Treat native folders as source of truth and validate toolchain parity first.
+- RN CLI + EAS/CI integration:
+  - Keep environment and build-path assumptions explicit and CI-aligned.
+- Bare-native-heavy projects:
+  - Separate RN-owned fixes from platform-owned native changes.
+
+## Technical Implementation Patterns
+- Use a triage matrix: layer (`JS`, `bridge`, `native build`, `runtime`, `release`) x severity.
+- Route single-domain issues directly to the owning specialized path.
+- Split mixed-domain incidents into ordered sub-problems before proposing changes.
+- Keep orchestration output short: classification, route, immediate next action.
+
+## Anti-Patterns
+- Giving deep domain advice without first classifying layer and ownership.
+- Combining build, runtime, and release concerns in one vague recommendation.
+- Suggesting local-only fixes that diverge from CI behavior.
+
+## Decision Tree
+- If issue is quick and low-risk:
+  - provide lightweight guidance.
+- If issue is implementation-specific or release-blocking:
+  - route to specialized domain handling.
+- If issue is mixed-domain:
+  - split and order domains, then route sequentially.
+
+## Execution Workflow
+1. Collect required inputs.
+2. Classify problem layer and urgency.
+3. Determine platform/toolchain ownership boundaries.
+4. Decide lightweight guidance vs deep routing.
+5. Define ordered handoff for mixed-domain work.
+6. Produce structured orchestration output.
+
+## Edge Cases
+- Same symptom has different root causes on iOS vs Android.
+- Local fix works but CI remains broken.
+- Build issue masked by runtime fallback behavior.
+- Mixed-domain incident where wrong first step increases blast radius.
+
+## Observability
+- Track detected layer, platform scope, and urgency.
+- Track routing decisions and escalation frequency.
+- Track ambiguous triage cases for refinement.
 
 ## Output Contract
-Use sections in this order:
-- Root Cause Hypothesis
-- Code and Config Changes
-- Commands
-- Risks
-- Verification
+- Context Summary
+- Assumptions
+- Architecture / Design
+- Implementation Steps
+- Verification Checklist
+- Risks / Rollback
+- Next Implementation Step
 
-## Senior Execution Mode
-- Start by identifying system boundaries, assumptions, and risk level.
-- Prefer smallest safe change that can be validated quickly.
-- Keep recommendations production-focused: reliability, maintainability, and operational clarity.
-- Make platform differences explicit when behavior diverges between iOS and Android.
+## Verification Checklist
+- Problem layer and ownership are explicit.
+- Routing decision is deterministic.
+- Platform-specific constraints are acknowledged.
+- Next step is minimal, actionable, and safe.
 
-## Decision Heuristics
-- Prefer deterministic and testable architectures over clever shortcuts.
-- Choose explicit typed contracts for all module boundaries.
-- Reject ambiguous state ownership; define single source of truth.
-- Prioritize debuggability and rollback safety for release-impacting changes.
-
-## Code Quality Gates
-- Enforce strict TypeScript (no implicit any, typed inputs/outputs).
-- Avoid hidden side effects and broad mutable shared state.
-- Keep components/services single-purpose and composable.
-- Prevent unnecessary re-renders by controlling subscription and prop surfaces.
-
-## Review Checklist
-- Correctness: Does the solution handle edge and failure states?
-- Scale: Does it remain maintainable as features grow?
-- Performance: Are hot paths optimized with measurable intent?
-- Operations: Can this be monitored, debugged, and rolled back safely?
-
-## Response Style
-Always provide:
-- clear problem framing,
-- actionable implementation,
-- verification steps,
-- one senior-level follow-up recommendation.
+## Risks / Rollback
+- Risk: wrong triage causes delayed fix.
+  - Rollback: reclassify by layer and reroute with explicit assumptions.
+- Risk: shallow advice for high-risk issue.
+  - Rollback: escalate to deep domain handling immediately.
