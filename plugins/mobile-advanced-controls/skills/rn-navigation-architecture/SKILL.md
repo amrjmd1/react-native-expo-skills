@@ -1,65 +1,95 @@
 ---
 name: rn-navigation-architecture
-description: Navigation architecture guidance for Expo Router or React Navigation in complex apps. Use for nested navigation composition, route typing, deep linking, auth gating, modal stacks, and scalable navigation boundaries.
+description: Execution-grade skill for scalable React Native navigation architecture with typed routing, deep-link reliability, and deterministic flow boundaries.
+metadata:
+  domain: mobile-advanced-controls
 ---
 
-# RN Navigation Architecture
+# Skill: rn-navigation-architecture
 
-## Mission
-Create navigation systems that stay typed, debuggable, and evolvable as app complexity grows.
+## Purpose
+Design typed, maintainable navigation systems with explicit route ownership, guard logic, and reliable deep-link behavior.
 
-## Navigation Workflow
-1. Model route tree by product domain and ownership.
-2. Define route param types and shared navigation contracts.
-3. Implement auth/onboarding gating without route ambiguity.
-4. Validate deep links and edge-route behavior.
+## When to Use
+- Defining nested navigator or Expo Router route structure.
+- Hardening auth/onboarding gating and modal flow boundaries.
+- Fixing deep-link and back-stack reliability issues.
 
-## Architecture Rules
-- Keep route naming consistent and stable.
-- Separate app shell, auth, and modal concerns.
-- Avoid cross-feature navigation coupling through implicit string routes.
-- Provide typed helper APIs for high-traffic navigation paths.
+## When Not to Use
+- Single-screen apps with trivial navigation.
+- Non-navigation runtime issues.
 
-## Reliability Checks
-- Verify cold-start deep links.
-- Verify foreground/background link handling.
-- Verify back-stack behavior across nested navigators.
+## Required Inputs
+- Navigation library/approach in use.
+- Route hierarchy and ownership boundaries.
+- Param contracts and deep-link requirements.
+- Auth/onboarding gating requirements.
+- Platform-specific navigation behavior constraints.
+
+## Framework-Specific Directives
+- React Navigation/Expo Router:
+  - Keep route contracts typed and centralized.
+- Guard flows:
+  - Keep auth and onboarding gating deterministic.
+- Deep links:
+  - Validate cold-start and foreground handling paths.
+
+## Technical Implementation Patterns
+- Model route tree by domain ownership.
+- Define typed param contracts and helper APIs.
+- Separate app shell/auth/modal flows.
+- Use explicit deep-link mapping and fallback routes.
+
+## Anti-Patterns
+- Stringly-typed route calls scattered across features.
+- Coupling unrelated features through shared navigator internals.
+- Guard logic with ambiguous redirect behavior.
+
+## Decision Tree
+- If route contract is unstable:
+  - define typed route/param model first.
+- If issue is auth gating:
+  - isolate guard flow before route refactor.
+- If issue is deep-link handling:
+  - validate mapping and startup/foreground entry paths.
+
+## Execution Workflow
+1. Collect required inputs.
+2. Model route ownership and hierarchy.
+3. Define typed route and param contracts.
+4. Implement guard and modal boundary rules.
+5. Validate deep-link and back-stack behavior.
+6. Verify iOS/Android parity.
+7. Produce structured output.
+
+## Edge Cases
+- Deep link works on cold start but fails in foreground.
+- Back-stack behavior diverges across nested navigators.
+- Auth redirect loop after token state change.
+- iOS and Android intent handling differences.
+
+## Observability
+- Track deep-link resolution success/failure.
+- Track guard redirect loop incidents.
+- Track back-stack/navigation error events.
 
 ## Output Contract
-Use sections in this order:
-- Route Model
-- Typed Contracts
-- Guarding Strategy
-- Deep Link Plan
-- Verification Cases
+- Context Summary
+- Assumptions
+- Architecture / Design
+- Implementation Steps
+- Verification Checklist
+- Risks / Rollback
+- Next Implementation Step
 
-## Senior Execution Mode
-- Start by identifying system boundaries, assumptions, and risk level.
-- Prefer smallest safe change that can be validated quickly.
-- Keep recommendations production-focused: reliability, maintainability, and operational clarity.
-- Make platform differences explicit when behavior diverges between iOS and Android.
+## Verification Checklist
+- Route ownership and contracts are explicit.
+- Guarding logic is deterministic.
+- Deep-link mappings are validated in startup and foreground.
+- Back-stack behavior is verified across target platforms.
 
-## Decision Heuristics
-- Prefer deterministic and testable architectures over clever shortcuts.
-- Choose explicit typed contracts for all module boundaries.
-- Reject ambiguous state ownership; define single source of truth.
-- Prioritize debuggability and rollback safety for release-impacting changes.
-
-## Code Quality Gates
-- Enforce strict TypeScript (no implicit any, typed inputs/outputs).
-- Avoid hidden side effects and broad mutable shared state.
-- Keep components/services single-purpose and composable.
-- Prevent unnecessary re-renders by controlling subscription and prop surfaces.
-
-## Review Checklist
-- Correctness: Does the solution handle edge and failure states?
-- Scale: Does it remain maintainable as features grow?
-- Performance: Are hot paths optimized with measurable intent?
-- Operations: Can this be monitored, debugged, and rolled back safely?
-
-## Response Style
-Always provide:
-- clear problem framing,
-- actionable implementation,
-- verification steps,
-- one senior-level follow-up recommendation.
+## Risks / Rollback
+- Risk: navigation refactor breaks route entry paths.
+  - Rollback: restore previous route map and apply scoped fixes.
+- Risk: deep-link behavior regresses in production.
+  - Rollback: revert affected link mapping and redeploy tested config.

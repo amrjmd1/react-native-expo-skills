@@ -1,66 +1,95 @@
 ---
 name: rn-testing-quality-gates
-description: Testing strategy for React Native projects with Jest and React Native Testing Library. Use for test architecture, mocking strategy, integration coverage, CI quality gates, and regression prevention for critical user flows.
+description: Execution-grade skill for React Native testing strategy and deterministic CI quality gates protecting critical user flows.
+metadata:
+  domain: mobile-advanced-controls
 ---
 
-# RN Testing and Quality Gates
+# Skill: rn-testing-quality-gates
 
-## Mission
-Design high-signal test suites that protect business-critical behavior with minimal flakiness.
+## Purpose
+Define high-signal testing architecture and CI quality gates that reduce flakiness and protect critical product behavior.
 
-## Testing Workflow
-1. Prioritize test coverage by product risk.
-2. Define unit vs integration boundaries.
-3. Build deterministic test data/mocks.
-4. Configure CI gates and failure triage rules.
+## When to Use
+- Designing test strategy for unit/integration coverage.
+- Defining CI merge gates and failure triage rules.
+- Reducing flaky test behavior in RN projects.
 
-## Quality Rules
-- Test behavior, not implementation details.
-- Keep mock surface minimal and realistic.
-- Isolate time/network randomness.
-- Gate merges on critical-path failures.
+## When Not to Use
+- One-off manual QA instructions with no automated test scope.
+- Non-RN runtime issues unrelated to test architecture.
 
-## Coverage Priorities
-- Authentication and session integrity.
-- Checkout/payment or equivalent core revenue paths.
-- Offline/online transition behavior.
-- Error-state and retry flows.
+## Required Inputs
+- Critical user flows and risk priorities.
+- Current test stack and CI pipeline constraints.
+- Existing flaky test patterns.
+- Required coverage and quality gate thresholds.
+- Mocking/network/time control requirements.
+
+## Framework-Specific Directives
+- Jest + RNTL:
+  - test behavior contracts, not implementation internals.
+- CI quality gates:
+  - gate merges on critical-path failures.
+- Mocking strategy:
+  - keep mock surface minimal and deterministic.
+
+## Technical Implementation Patterns
+- Build risk-based test priority matrix.
+- Define clear unit vs integration boundaries.
+- Standardize deterministic fixture and time/network controls.
+- Enforce gate policies by test criticality.
+
+## Anti-Patterns
+- Over-mocking that hides real behavior failures.
+- Flaky time/network-dependent tests without controls.
+- Treating all tests with equal gate severity.
+
+## Decision Tree
+- If flow is business-critical:
+  - enforce integration coverage and strict CI gates.
+- If flow is low-risk utility behavior:
+  - prioritize focused unit coverage.
+- If flake rate is high:
+  - stabilize test determinism before expanding suite.
+
+## Execution Workflow
+1. Collect required inputs.
+2. Build risk-based coverage matrix.
+3. Define test boundaries and deterministic fixtures.
+4. Implement/adjust CI quality gate thresholds.
+5. Add flake detection and triage rules.
+6. Validate reliability of critical-path tests.
+7. Produce structured output.
+
+## Edge Cases
+- Tests pass locally but fail in CI due to timing/environment drift.
+- Critical flow untested because ownership boundary is unclear.
+- Mock behavior diverges from production API contract.
+- Flake masking hides genuine regression.
+
+## Observability
+- Track pass/fail trends by suite and risk class.
+- Track flake rate and retry-triggered recoveries.
+- Track quality gate failure causes over time.
 
 ## Output Contract
-Use sections in this order:
-- Test Strategy
-- Priority Matrix
-- Sample Tests
-- CI Gates
-- Flake Reduction Plan
+- Context Summary
+- Assumptions
+- Architecture / Design
+- Implementation Steps
+- Verification Checklist
+- Risks / Rollback
+- Next Implementation Step
 
-## Senior Execution Mode
-- Start by identifying system boundaries, assumptions, and risk level.
-- Prefer smallest safe change that can be validated quickly.
-- Keep recommendations production-focused: reliability, maintainability, and operational clarity.
-- Make platform differences explicit when behavior diverges between iOS and Android.
+## Verification Checklist
+- Risk-priority matrix is explicit and actionable.
+- Critical-path coverage and CI gates are enforced.
+- Test determinism controls are in place.
+- Flake triage workflow is defined.
 
-## Decision Heuristics
-- Prefer deterministic and testable architectures over clever shortcuts.
-- Choose explicit typed contracts for all module boundaries.
-- Reject ambiguous state ownership; define single source of truth.
-- Prioritize debuggability and rollback safety for release-impacting changes.
-
-## Code Quality Gates
-- Enforce strict TypeScript (no implicit any, typed inputs/outputs).
-- Avoid hidden side effects and broad mutable shared state.
-- Keep components/services single-purpose and composable.
-- Prevent unnecessary re-renders by controlling subscription and prop surfaces.
-
-## Review Checklist
-- Correctness: Does the solution handle edge and failure states?
-- Scale: Does it remain maintainable as features grow?
-- Performance: Are hot paths optimized with measurable intent?
-- Operations: Can this be monitored, debugged, and rolled back safely?
-
-## Response Style
-Always provide:
-- clear problem framing,
-- actionable implementation,
-- verification steps,
-- one senior-level follow-up recommendation.
+## Risks / Rollback
+- Risk: strict gates block velocity without signal gain.
+  - Rollback: rebalance gate severity by risk class.
+- Risk: weak gates allow regressions into production.
+  - Rollback: tighten critical-path thresholds and add missing integration coverage.

@@ -1,65 +1,95 @@
 ---
 name: rn-forms-validation
-description: Form architecture guidance for React Native with React Hook Form and Zod. Use for typed form schemas, reusable field primitives, async validation, submission error handling, and high-quality form UX.
+description: Execution-grade skill for typed React Native form and validation architecture with deterministic submit flows and resilient error handling.
+metadata:
+  domain: mobile-advanced-controls
 ---
 
-# RN Forms and Validation
+# Skill: rn-forms-validation
 
-## Mission
-Build forms that are typed, resilient, and easy to maintain under changing product requirements.
+## Purpose
+Design maintainable, typed form systems with consistent validation, submission handling, and denied/error-state UX.
 
-## Form Workflow
-1. Define schema-first validation with inferred TypeScript types.
-2. Build reusable controlled field components.
-3. Implement consistent async submit and error handling flow.
-4. Standardize validation messaging and accessibility behavior.
+## When to Use
+- Building complex forms with React Hook Form and schema validation.
+- Standardizing async submit and error handling paths.
+- Fixing validation inconsistency or double-submit issues.
 
-## Implementation Rules
-- Keep validation schema and UI constraints aligned.
-- Use field-level components with explicit props and error contracts.
-- Disable double-submit paths and race conditions.
-- Preserve draft state intentionally when navigating away.
+## When Not to Use
+- Simple uncontrolled inputs with no validation requirements.
+- Backend-only validation logic changes.
 
-## UX Quality Gates
-- Show actionable validation messages.
-- Focus first invalid input on submit failure.
-- Handle network errors separately from validation errors.
+## Required Inputs
+- Form fields and validation constraints.
+- Schema strategy (e.g., Zod) and type requirements.
+- Submit endpoint behavior and error model.
+- UX requirements for validation and network errors.
+- Persistence/draft behavior requirements.
+
+## Framework-Specific Directives
+- React Hook Form:
+  - Keep field registration and controlled wrappers explicit.
+- Schema validation:
+  - Keep schema as single validation source and infer TS types.
+- Cross-platform UX:
+  - Ensure focus, keyboard, and error presentation parity.
+
+## Technical Implementation Patterns
+- Use schema-first typed form contracts.
+- Separate validation errors from submission/network errors.
+- Build reusable field primitives with explicit error props.
+- Guard duplicate submissions and racing async flows.
+
+## Anti-Patterns
+- Divergent UI constraints from schema constraints.
+- Mixing validation and transport error states.
+- Repeated submit attempts without request-state gating.
+
+## Decision Tree
+- If form has complex constraints:
+  - use schema-driven typed validation.
+- If submit fails with validation errors:
+  - focus first invalid field and show actionable messages.
+- If submit fails with network/server errors:
+  - preserve form state and surface retry path.
+
+## Execution Workflow
+1. Collect required inputs.
+2. Define schema and inferred type model.
+3. Implement reusable typed field components.
+4. Implement submit/error handling flow.
+5. Add draft persistence behavior if required.
+6. Validate UX/accessibility and edge states.
+7. Produce structured output.
+
+## Edge Cases
+- Async validation race causes stale error state.
+- Form state lost after navigation transition.
+- Network error incorrectly shown as field validation error.
+- Keyboard/focus flow fails on one platform.
+
+## Observability
+- Track submit success/failure by error class.
+- Track validation error frequency by field.
+- Track duplicate-submit prevention events.
 
 ## Output Contract
-Use sections in this order:
-- Schema Design
-- Typed Form Model
-- Reusable Fields
-- Submit/Error Flow
-- Test Cases
+- Context Summary
+- Assumptions
+- Architecture / Design
+- Implementation Steps
+- Verification Checklist
+- Risks / Rollback
+- Next Implementation Step
 
-## Senior Execution Mode
-- Start by identifying system boundaries, assumptions, and risk level.
-- Prefer smallest safe change that can be validated quickly.
-- Keep recommendations production-focused: reliability, maintainability, and operational clarity.
-- Make platform differences explicit when behavior diverges between iOS and Android.
+## Verification Checklist
+- Schema and UI constraints are aligned.
+- Field components expose typed, reusable contracts.
+- Submit flow handles validation and network errors separately.
+- Double-submit paths are blocked.
 
-## Decision Heuristics
-- Prefer deterministic and testable architectures over clever shortcuts.
-- Choose explicit typed contracts for all module boundaries.
-- Reject ambiguous state ownership; define single source of truth.
-- Prioritize debuggability and rollback safety for release-impacting changes.
-
-## Code Quality Gates
-- Enforce strict TypeScript (no implicit any, typed inputs/outputs).
-- Avoid hidden side effects and broad mutable shared state.
-- Keep components/services single-purpose and composable.
-- Prevent unnecessary re-renders by controlling subscription and prop surfaces.
-
-## Review Checklist
-- Correctness: Does the solution handle edge and failure states?
-- Scale: Does it remain maintainable as features grow?
-- Performance: Are hot paths optimized with measurable intent?
-- Operations: Can this be monitored, debugged, and rolled back safely?
-
-## Response Style
-Always provide:
-- clear problem framing,
-- actionable implementation,
-- verification steps,
-- one senior-level follow-up recommendation.
+## Risks / Rollback
+- Risk: schema mismatch breaks submit path.
+  - Rollback: revert to last stable schema and mapped field contracts.
+- Risk: new form handling introduces UX regressions.
+  - Rollback: restore prior submit/error flow and patch incrementally.

@@ -1,66 +1,95 @@
 ---
 name: rn-list-performance-control
-description: Advanced list rendering guidance for FlatList and virtualized UIs. Use for large datasets, pagination/infinite scroll, item memoization, key stability, layout measurement, and reducing list-related render bottlenecks.
+description: Execution-grade skill for deterministic FlatList and virtualized list performance control under large data and pagination pressure.
+metadata:
+  domain: mobile-advanced-controls
 ---
 
-# RN List Performance Control
+# Skill: rn-list-performance-control
 
-## Mission
-Keep list-heavy screens responsive under realistic data and device constraints.
+## Purpose
+Keep list-heavy screens responsive by controlling virtualization, row render cost, and pagination behavior under real device constraints.
 
-## List Optimization Workflow
-1. Diagnose if bottleneck is data fetch, transformation, render, or layout.
-2. Apply virtualization and stable-key discipline.
-3. Reduce item component render cost.
-4. Validate scrolling and interaction metrics.
+## When to Use
+- Optimizing large lists with scrolling jank.
+- Fixing duplicate pagination fetches or list render churn.
+- Designing stable list architecture for high-volume datasets.
 
-## Implementation Rules
-- Use stable keys and avoid index keys for mutable lists.
-- Memoize item rows when props are stable.
-- Use `getItemLayout` when item heights are fixed or predictable.
-- Keep `renderItem` closures stable.
-- Avoid expensive formatting work inside row render.
+## When Not to Use
+- Small static lists with no performance pressure.
+- Performance issues unrelated to list rendering.
 
-## Pagination Discipline
-- Decouple fetch trigger from render path.
-- Guard duplicate fetches during fast scroll.
-- Handle loading/error/end-of-list states explicitly.
+## Required Inputs
+- Dataset size and mutation frequency.
+- Target platform/device constraints.
+- List primitive and virtualization settings.
+- Item rendering complexity and key strategy.
+- Pagination/infinite-scroll behavior requirements.
+
+## Framework-Specific Directives
+- FlatList/virtualization:
+  - Use stable keys and deterministic windowing settings.
+- Row rendering:
+  - Keep row props minimal and memoization boundaries explicit.
+- Pagination:
+  - Guard fetch concurrency and end-of-list state transitions.
+
+## Technical Implementation Patterns
+- Classify bottleneck: data transform, render, layout, or fetch.
+- Stabilize `renderItem`, keys, and row props.
+- Use `getItemLayout` for predictable row heights.
+- Separate pagination triggers from render path.
+
+## Anti-Patterns
+- Index keys for mutable data sets.
+- Heavy formatting/computation inside row render.
+- Unbounded fetch triggers during fast scrolling.
+
+## Decision Tree
+- If bottleneck is render-cost:
+  - optimize row component boundaries first.
+- If bottleneck is layout:
+  - provide predictable measurement strategy.
+- If bottleneck is pagination:
+  - fix fetch trigger/guard logic before UI changes.
+
+## Execution Workflow
+1. Collect required inputs.
+2. Classify list bottleneck type.
+3. Apply virtualization and key stability rules.
+4. Reduce row render cost and closure churn.
+5. Harden pagination state/fetch flow.
+6. Validate scroll and interaction metrics.
+7. Produce structured output.
+
+## Edge Cases
+- Smooth list in debug but janky in release on low-end devices.
+- Duplicate fetches on rapid scroll.
+- One platform shows heavier layout cost.
+- Dynamic row heights break measurement assumptions.
+
+## Observability
+- Track dropped-frame indicators during list scroll.
+- Track row rerender count in hot paths.
+- Track pagination fetch concurrency/error rates.
 
 ## Output Contract
-Use sections in this order:
-- Bottleneck Class
-- FlatList Strategy
-- Row Optimization
-- Pagination/State Flow
-- Performance Validation
+- Context Summary
+- Assumptions
+- Architecture / Design
+- Implementation Steps
+- Verification Checklist
+- Risks / Rollback
+- Next Implementation Step
 
-## Senior Execution Mode
-- Start by identifying system boundaries, assumptions, and risk level.
-- Prefer smallest safe change that can be validated quickly.
-- Keep recommendations production-focused: reliability, maintainability, and operational clarity.
-- Make platform differences explicit when behavior diverges between iOS and Android.
+## Verification Checklist
+- Key strategy is stable and mutation-safe.
+- Row rendering cost is reduced and measurable.
+- Pagination triggers are deterministic and guarded.
+- Cross-platform scroll performance is validated.
 
-## Decision Heuristics
-- Prefer deterministic and testable architectures over clever shortcuts.
-- Choose explicit typed contracts for all module boundaries.
-- Reject ambiguous state ownership; define single source of truth.
-- Prioritize debuggability and rollback safety for release-impacting changes.
-
-## Code Quality Gates
-- Enforce strict TypeScript (no implicit any, typed inputs/outputs).
-- Avoid hidden side effects and broad mutable shared state.
-- Keep components/services single-purpose and composable.
-- Prevent unnecessary re-renders by controlling subscription and prop surfaces.
-
-## Review Checklist
-- Correctness: Does the solution handle edge and failure states?
-- Scale: Does it remain maintainable as features grow?
-- Performance: Are hot paths optimized with measurable intent?
-- Operations: Can this be monitored, debugged, and rolled back safely?
-
-## Response Style
-Always provide:
-- clear problem framing,
-- actionable implementation,
-- verification steps,
-- one senior-level follow-up recommendation.
+## Risks / Rollback
+- Risk: optimization breaks list correctness.
+  - Rollback: revert row/pagination changes to last stable baseline.
+- Risk: virtualization tuning regresses UX on edge devices.
+  - Rollback: restore previous virtualization config and retune incrementally.
