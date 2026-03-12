@@ -1,6 +1,6 @@
 ---
 name: rn-navigation-architecture
-description: Execution-grade skill for scalable React Native navigation architecture with typed routing, deep-link reliability, and deterministic flow boundaries.
+description: Execution-grade skill for designing React Native navigation hierarchies, route ownership, auth gating, and deep link-safe screen architecture.
 metadata:
   domain: mobile-advanced-controls
 ---
@@ -20,72 +20,135 @@ Design typed, maintainable navigation systems with explicit route ownership, gua
 - Non-navigation runtime issues.
 
 ## Required Inputs
-- Navigation library/approach in use.
-- Route hierarchy and ownership boundaries.
-- Param contracts and deep-link requirements.
-- Auth/onboarding gating requirements.
-- Platform-specific navigation behavior constraints.
+- App size: `small` | `medium` | `large`.
+- Target platform: `ios` | `android` | `both`.
+- Navigation library/version and current navigator structure.
+- Route types involved: `stack` | `tabs` | `drawer` | `modal` | `nested`.
+- Auth flow requirements and public/private route boundaries.
+- Deep-link requirements and supported entry points.
+- Screen persistence/restoration expectations.
+- Route parameter complexity and stability constraints.
+- Feature/module ownership boundaries for routes/navigators.
+- Performance-sensitive navigation surfaces.
+- Context: `greenfield` | `migration`.
 
 ## Framework-Specific Directives
-- React Navigation/Expo Router:
-  - Keep route contracts typed and centralized.
+- React Native navigation architecture:
+  - Keep feature ownership explicit at each navigator boundary.
+  - Use nested navigators only when ownership and lifecycle are clear.
+- React Navigation-compatible patterns:
+  - Define typed route param contracts and ownership contracts per navigator.
+  - Avoid central route sprawl; segment by feature modules.
 - Guard flows:
-  - Keep auth and onboarding gating deterministic.
-- Deep links:
-  - Validate cold-start and foreground handling paths.
+  - Separate auth/public gating logic from unrelated domain state logic.
+- Deep links and restoration:
+  - Validate cold-start + foreground entry and restoration behavior under auth gates.
 
 ## Technical Implementation Patterns
-- Model route tree by domain ownership.
-- Define typed param contracts and helper APIs.
-- Separate app shell/auth/modal flows.
-- Use explicit deep-link mapping and fallback routes.
+- Route ownership map:
+  - assign each route to feature owner and owning navigator.
+- Navigator boundary map:
+  - define app shell vs feature navigators and cross-boundary transitions.
+- Auth-gated flow separation:
+  - isolate auth/public trees and explicit transitions between them.
+- Typed route param contracts:
+  - keep param schemas stable and validated at boundaries.
+- Deep-link route mapping:
+  - map external paths to canonical routes and fallback behavior.
+- Modal ownership rules:
+  - define modal responsibilities separately from stack/tab responsibilities.
+- Navigation restoration boundary:
+  - define which route state is restorable and invalidation rules.
+- Feature-first navigator decomposition:
+  - keep feature route modules isolated with shared shell integration.
+- Screen lifecycle/remount awareness:
+  - document remount-sensitive routes and state reset behavior.
+- Migration-safe route tree decomposition:
+  - decompose monolithic trees incrementally with aliasing/compatibility guards.
 
 ## Anti-Patterns
 - Stringly-typed route calls scattered across features.
+- Mixing auth flow logic with unrelated navigation state.
+- Duplicating route definitions across modules.
+- Untyped or unstable route params.
+- Deeply nested navigators without ownership rules.
+- Putting domain state into navigation params without clear need.
+- Excessive global navigation escape-hatch usage.
+- Ambiguous overlap between modal and stack responsibilities.
 - Coupling unrelated features through shared navigator internals.
 - Guard logic with ambiguous redirect behavior.
 
 ## Decision Tree
-- If route contract is unstable:
-  - define typed route/param model first.
-- If issue is auth gating:
-  - isolate guard flow before route refactor.
-- If issue is deep-link handling:
-  - validate mapping and startup/foreground entry paths.
+- If flow is single-feature and local:
+  - keep feature-owned navigator/module boundary.
+- If flow spans app shell concerns:
+  - place in shared shell navigator with explicit ownership.
+- If route requires auth:
+  - place behind auth gate; define unauthenticated redirect contract.
+- If route is public:
+  - keep outside auth-gated tree.
+- If responsibility is transient overlay:
+  - use modal boundary; avoid stack/tab ambiguity.
+- If params are transient navigation hints:
+  - keep in route params.
+- If data is durable feature/domain state:
+  - keep out of params and store in feature state.
+- If migration from monolithic navigator:
+  - decompose by feature ownership with compatibility aliases.
+- If performance-sensitive flow:
+  - minimize remount churn and cross-navigator transitions.
 
 ## Execution Workflow
 1. Collect required inputs.
-2. Model route ownership and hierarchy.
-3. Define typed route and param contracts.
-4. Implement guard and modal boundary rules.
-5. Validate deep-link and back-stack behavior.
-6. Verify iOS/Android parity.
-7. Produce structured output.
+2. Classify route types and feature ownership.
+3. Define navigator boundaries.
+4. Define auth/public route separation.
+5. Define route param contracts.
+6. Define deep-link and restoration behavior.
+7. Validate screen lifecycle/remount implications.
+8. Validate performance and maintainability risks.
+9. Produce structured output.
 
 ## Edge Cases
 - Deep link works on cold start but fails in foreground.
+- Auth state changes while user is deep in nested navigation.
+- Deep link targets a screen behind auth gate.
+- Route params become too large or unstable.
+- Nested navigator remount resets expected screen state.
+- Modal flow conflicts with back-stack expectations.
+- Migration leaves duplicate route names or broken links.
+- State restoration restores invalid navigation path.
+- Feature module removed but route still referenced.
 - Back-stack behavior diverges across nested navigators.
-- Auth redirect loop after token state change.
 - iOS and Android intent handling differences.
 
 ## Observability
 - Track deep-link resolution success/failure.
-- Track guard redirect loop incidents.
+- Detect invalid deep-link targets and fallback usage.
+- Track guard redirect loop incidents and auth-gated redirect frequency.
+- Monitor screen mount/remount churn in sensitive flows.
+- Detect route parameter contract violations.
 - Track back-stack/navigation error events.
+- Do not log sensitive user data.
 
 ## Output Contract
 - Context Summary
 - Assumptions
-- Architecture / Design
-- Implementation Steps
-- Verification Checklist
+- Route Classification
+- Navigator Ownership Boundaries
+- Auth / Public Flow Separation
+- Route Param Contracts
+- Deep Link / Restoration Rules
+- Performance / Lifecycle Notes
 - Risks / Rollback
 - Next Implementation Step
 
 ## Verification Checklist
-- Route ownership and contracts are explicit.
-- Guarding logic is deterministic.
-- Deep-link mappings are validated in startup and foreground.
+- Route and navigator ownership boundaries are explicit.
+- Auth/public gating behavior is deterministic and loop-safe.
+- Route param contracts are typed and stable.
+- Deep-link + restoration paths are validated in startup and foreground.
+- Lifecycle/remount behavior is verified for sensitive flows.
 - Back-stack behavior is verified across target platforms.
 
 ## Risks / Rollback
