@@ -26,9 +26,11 @@ Design maintainable, typed form systems with consistent validation, submission h
 - Sync validation requirements.
 - Async validation requirements.
 - Server-side validation dependency and error contract.
+- Error state ownership model (field-level, form-level, submission-level).
 - Persistence/draft-save requirements.
 - Offline submission requirements.
 - Submission retry rules.
+- Submission idempotency/duplicate-submit constraints.
 - Accessibility expectations.
 - Localization/i18n requirements.
 - Context: `greenfield` | `migration`.
@@ -44,12 +46,21 @@ Design maintainable, typed form systems with consistent validation, submission h
 - Async validation:
   - Do not block UI interaction unnecessarily while async checks are pending.
   - Enforce deterministic stale-response handling for changed field values.
+- Async validation visibility:
+  - Expose pending/validating state to UI without blocking interaction.
+  - Make validation-in-progress state explicit to users.
+- Submission integrity:
+  - Use deterministic submit guards (single-flight, idempotency key, or request token) for critical actions.
+  - Keep in-flight submission state explicit and recoverable after failure/retry.
 - Cross-platform UX:
   - Ensure focus, keyboard, and error rendering parity.
 
 ## Technical Implementation Patterns
 - Field vs form ownership map:
   - define field-local state, form aggregate state, and submission state owners.
+- Field subscription isolation:
+  - limit field subscriptions to the smallest required state slice.
+  - reduce unnecessary rerenders in large or dynamic forms.
 - Touched/dirty/submitted lifecycle model:
   - make transitions explicit and deterministic for error visibility.
 - Sync validation boundary:
@@ -58,16 +69,26 @@ Design maintainable, typed form systems with consistent validation, submission h
   - isolate network-backed checks with cancellation/staleness guards.
 - Server error mapping contract:
   - map server field/global errors into stable client error buckets.
+- Error ownership map:
+  - define which errors are field-owned, form-owned, or submit-owned, and when each can block submission.
 - Draft vs committed separation:
   - keep draft edits separate from committed domain entities until success.
 - Multi-step checkpoint model:
   - validate per step and on final submit with explicit step ownership.
 - Submission state machine:
   - `idle -> validating -> submitting -> success|failure` with retry branch.
+- Request race control:
+  - ignore stale async validation/submission responses using latest-request tokens.
 - Retry-safe submission pattern:
   - prevent duplicate submissions and preserve user intent on retry.
 - Validation message timing rules:
   - show messages after meaningful interaction or submit attempt.
+- Validation performance control:
+  - debounce expensive validation paths.
+  - avoid full-form recomputation when only a single field changes.
+- Retry behavior clarity:
+  - define whether retry revalidates all fields or only failed submission.
+  - ensure retry does not reuse stale validation state.
 
 ## Anti-Patterns
 - Mixing form draft state with committed domain state.
@@ -78,6 +99,8 @@ Design maintainable, typed form systems with consistent validation, submission h
 - Duplicating conflicting validation rules across layers.
 - Persisting invalid drafts without schema/version awareness.
 - Repeated submit attempts without request-state gating.
+- Accepting stale async responses that overwrite newer field/form state.
+- Coupling submit button state to ambiguous error buckets.
 
 ## Decision Tree
 - If form is `simple`:
@@ -88,6 +111,8 @@ Design maintainable, typed form systems with consistent validation, submission h
   - resolve on client before submit transition.
 - If async validation is required:
   - run async checks with stale-result guards and non-blocking UI.
+- If async response is stale for current field value:
+  - discard response and keep latest-value validation state.
 - If field is optional:
   - defer validation until touched or submit.
 - If field is required:
@@ -100,6 +125,8 @@ Design maintainable, typed form systems with consistent validation, submission h
   - retain draft + submission context and expose controlled retry path.
 - If submission is fail-fast:
   - stop on first blocking error and surface deterministic ownership.
+- If submission is critical and side-effectful:
+  - enforce idempotency/single-flight guard before network dispatch.
 
 ## Execution Workflow
 1. Collect required inputs.
@@ -107,7 +134,7 @@ Design maintainable, typed form systems with consistent validation, submission h
 3. Define draft vs committed state ownership.
 4. Define field/form/submission validation boundaries.
 5. Define error timing and presentation rules.
-6. Define submission lifecycle and retry behavior.
+6. Define submission lifecycle, integrity guards, and retry behavior.
 7. Define accessibility and localization requirements.
 8. Validate performance and maintainability risks.
 9. Produce structured output.
@@ -115,8 +142,10 @@ Design maintainable, typed form systems with consistent validation, submission h
 ## Edge Cases
 - Async validation returns after field value changed.
 - Server rejects value previously accepted by client validation.
+- Stale async validation response overwrites newer user input state.
 - Multi-step flow loses draft state during navigation.
 - User retries after partial submission failure.
+- Rapid double-tap submit triggers duplicate side effects.
 - Field error clears visually while submission remains blocked.
 - Localized validation message overflows constrained UI.
 - Offline queue submits stale draft data.
@@ -126,7 +155,9 @@ Design maintainable, typed form systems with consistent validation, submission h
 ## Observability
 - Track validation failure rate by field and form step.
 - Observe async validation latency and timeout frequency.
+- Track stale async response discard count.
 - Detect repeated submission failures by error class.
+- Track submit lifecycle durations (`validating`, `submitting`, `retrying`).
 - Surface abandoned forms after repeated validation errors.
 - Detect mismatch between client validation pass and server rejection.
 - Observe retry loops or stuck submission states.
@@ -138,7 +169,9 @@ Design maintainable, typed form systems with consistent validation, submission h
 - Assumptions
 - Form State Ownership
 - Validation Boundaries
+- Async Validation Strategy
 - Submission Lifecycle
+- Retry / Recovery Strategy
 - Error Presentation Rules
 - Accessibility / Localization Notes
 - Risks / Rollback
