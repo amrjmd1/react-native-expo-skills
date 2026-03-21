@@ -48,12 +48,23 @@ Implement smooth, deterministic React Native animations with Reanimated while co
   - Treat reduced-motion support as first-class and deterministic.
 - Cross-platform:
   - Validate parity under iOS and Android interaction timing differences.
+- Platform timing differences:
+  - Account for differences in gesture velocity, spring physics, and event timing.
+  - Tune animation parameters per platform when needed.
 
 ## Technical Implementation Patterns
 - Animation classification model:
   - classify by gesture-driven, state-driven, layout-driven, or continuous-loop behavior.
+- Interaction contention model:
+  - define how gesture, scroll, navigation, and layout animation sources compete.
+  - establish priority rules (e.g., gesture overrides transition).
+  - ensure deterministic resolution of competing animation drivers.
 - UI-thread vs JS-thread ownership map:
   - assign owner for each animation path and side-effect boundary.
+- Animation ownership transfer:
+  - define ownership transfer across gesture -> state -> layout paths.
+  - ensure shared values are not controlled by multiple sources simultaneously.
+  - enforce single-writer principle for animation-critical values.
 - runOnJS boundary discipline:
   - use `runOnJS` only for low-frequency side effects such as analytics, navigation triggers, or state synchronization after animation completion.
   - avoid invoking `runOnJS` inside high-frequency animation loops or gesture frames.
@@ -63,6 +74,10 @@ Implement smooth, deterministic React Native animations with Reanimated while co
   - define source-of-truth shared values and update authority per interaction.
 - Derived-value minimization:
   - reduce per-frame derived computation cost under high interaction rates.
+- Frame budget awareness:
+  - ensure per-frame work stays within safe execution limits (~16ms for 60fps).
+  - identify heavy derived calculations and move them off the critical path.
+  - treat frame drops as system-level failure, not minor degradation.
 - Gesture-driven animation path:
   - keep gesture -> shared value -> animated style pipeline isolated from React rerenders.
 - State-driven transition path:
@@ -71,6 +86,19 @@ Implement smooth, deterministic React Native animations with Reanimated while co
   - isolate layout transitions from simultaneously controlled gesture transforms.
 - Interruption/cancellation rules:
   - define cancel/reset/snap behavior for partial gestures and competing animations.
+- Gesture cancellation strategy:
+  - define behavior when gesture is aborted mid-flight.
+  - ensure UI resolves into a valid stable state (snap-back, settle, or continue).
+  - avoid leaving values in intermediate invalid states.
+- Completion signal contract:
+  - define idempotent completion behavior for animation side effects.
+  - completion side effects must not fire more than once.
+  - cancellation/interruption must not trigger completion logic.
+  - guard against race conditions between completion and cancellation.
+- Resource safety:
+  - ensure animations do not retain references after unmount.
+  - avoid leaking listeners or shared values across screens.
+  - validate cleanup under rapid navigation.
 - Before/after profiling workflow:
   - compare baseline vs post-change frame behavior in matched release/device contexts.
 
@@ -123,14 +151,23 @@ Implement smooth, deterministic React Native animations with Reanimated while co
 - Reduced-motion mode disables expected feedback incorrectly.
 - Continuous animation degrades performance over long sessions.
 - Scroll + animation contention causes frame drops.
+- Rapid navigation during animation causes inconsistent state.
+- Gesture interrupted by navigation transition.
+- Animation completes after screen unmount.
+- Multiple animations compete on same shared value.
+- Layout + transform conflict causes visual glitch.
 
 ## Observability
 - Track dropped-frame indicators during animation scenarios.
+- Track animation interruption vs completion ratio.
 - Compare release-build animation smoothness across device classes.
+- Detect repeated frame drops under identical interaction paths.
 - Detect repeated interruption/cancellation failure cases.
 - Track animation completion vs cancellation ratios to detect interaction interruption bugs or unstable motion contracts.
+- Detect long-lived animations beyond expected lifecycle.
 - Record first-interaction animation performance when relevant.
 - Surface thread-boundary mistakes correlated with jank.
+- Correlate jank with specific animation paths.
 - Track platform-specific animation regressions.
 - Do not log sensitive user data.
 
@@ -149,9 +186,14 @@ Implement smooth, deterministic React Native animations with Reanimated while co
 ## Verification Checklist
 - Thread ownership is explicit for critical animation paths.
 - Worklet boundaries are deterministic and side-effect-safe.
+- No shared value has multiple active writers.
+- No animation remains active after ownership ends.
 - Interruption/cancellation behavior is deterministic.
+- Completion/cancellation semantics are correct.
 - Reduced-motion behavior is handled when applicable.
 - Frame stability is validated on target platforms and device classes.
+- Frame stability holds under rapid interaction.
+- Cross-platform behavior is validated.
 - Regression checks compare baseline and post-change in release mode.
 
 ## Risks / Rollback
