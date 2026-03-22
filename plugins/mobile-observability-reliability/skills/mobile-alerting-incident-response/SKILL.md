@@ -1,6 +1,6 @@
 ---
 name: mobile-alerting-incident-response
-description: Execution-grade skill for defining operational alerts and incident response workflows for React Native and Expo apps.
+description: Execution-grade skill for designing mobile alerting and incident response systems with deterministic signal thresholds, severity classification, escalation paths, and rollback-ready mitigation strategies.
 metadata:
   domain: mobile-observability-reliability
 ---
@@ -27,18 +27,32 @@ Collect these before implementation; missing values must be explicit assumptions
 
 - Telemetry backend: `Sentry` | `Datadog` | `OpenTelemetry` | custom.
 - Alerting platform: `PagerDuty` | `OpsGenie` | Slack alerts | custom.
+- Target platform: `ios` | `android` | `both`.
+- Telemetry signal types available: `events` | `logs` | `metrics`.
 - Environment scope: `dev`, `staging`, `prod` with routing boundaries.
 - Service ownership model: team ownership by feature/domain/platform.
 - On-call rotation model: primary/secondary, timezone model, handoff rules.
+- Escalation channels: pager, Slack, email, incident bridge.
 - Severity taxonomy: `SEV1`-`SEV4` with user-impact definitions.
+- SLO/SLA expectations and error-budget policy.
 - Escalation policy: ack timeout, re-page policy, manager escalation, incident commander criteria.
 - Alert noise tolerance: expected daily alert budget and false-positive budget.
 - Mobile platform coverage: iOS, Android, app version cohort, release channel.
 - Telemetry signals available: crash rate, ANR/freeze, API failure, auth error bursts, latency p95/p99, offline replay failures.
-- Release context: rollout strategy, canary cohorts, kill switch capability.
+- Release cadence and release context: rollout strategy, canary cohorts, kill switch capability.
+- User-impact thresholds and segmentation model (region/cohort/tier).
 - Telemetry ingestion delay tolerance and fallback signal strategy.
+- Rollback capability and mitigation constraints.
+- Observability coverage level and known blind spots.
 
 ## Framework-Specific Directives
+- Alerts must be derived from structured telemetry contracts, not ad-hoc signals.
+- Alerting is a contract between telemetry quality and response ownership.
+- Never alert on raw metrics without threshold, window, and context.
+- Alerts must map to user impact, not anomaly alone.
+- Avoid coupling alert triggers directly to UI logic.
+- Alerts must be actionable; informational-only signals route to non-paging channels.
+- Account for offline users and delayed telemetry in incident detection.
 ### Expo Managed
 - Use `@sentry/react-native` or equivalent managed-compatible telemetry SDK for crash/error signals.
 - Include Expo release/channel metadata in alerts to isolate rollout-specific incidents.
@@ -75,8 +89,9 @@ Collect these before implementation; missing values must be explicit assumptions
 
 ## Technical Implementation Patterns
 - Alert signal classification:
-  - Classify as `availability`, `stability`, `performance`, `data-integrity`, `dependency`.
-  - Map each class to default severity floor and escalation target.
+  - Classify by severity level: `info`, `warning`, `critical`.
+  - Classify impact as `user-impact` vs `system-impact`.
+  - Map each class to escalation target and response SLA.
 - Alert rule definitions:
   - Define rule ID, source metric, comparator, threshold, window, min sample size, cooldown, dedupe key, severity, runbook URL.
   - Keep rules versioned and environment-scoped.
@@ -89,7 +104,8 @@ Collect these before implementation; missing values must be explicit assumptions
 - Anomaly-based alerts:
   - Use only for high-volume stable baselines.
   - Always pair with hard guardrails for catastrophic failures.
-- Observability-to-alert mapping:
+- Signal-to-alert mapping:
+  - Define deterministic mapping from telemetry signal to alert type.
   - `crash_rate > threshold` -> stability incident.
   - `api_failure_rate` spike -> availability/dependency incident.
   - `offline_queue_replay_failures` burst -> sync reliability incident.
@@ -100,6 +116,23 @@ Collect these before implementation; missing values must be explicit assumptions
 - Alert deduplication:
   - Group by `signal_class + env + platform + release + feature_area`.
   - Suppress duplicate pages during active incident state.
+- Incident correlation:
+  - Correlate multi-signal failures into a single incident key.
+  - Prevent fragmented incidents from same release/platform failure.
+- Escalation model:
+  - Escalate by severity and duration (time in incident state).
+  - Enforce explicit owner at each escalation level.
+- Alert fatigue control:
+  - Suppress low-signal noisy rules.
+  - Enforce per-signal alert budgets and auto-review for noisy rules.
+- Rollback trigger model:
+  - Define rollback/mitigation trigger thresholds by severity and blast radius.
+  - Gate rollback on readiness checks and operator confirmation policy.
+- Incident lifecycle:
+  - `detect -> alert -> acknowledge -> mitigate -> resolve -> postmortem`.
+- Alert determinism:
+  - Identical signal conditions must produce identical alert behavior.
+  - Remove timing-only branching from escalation logic.
 - Runbook linkage:
   - Every paging alert must include a runbook URL and first 3 diagnostic checks.
   - Missing runbook blocks promotion of alert to paging severity.
@@ -121,6 +154,11 @@ If environment == production
 Else
   -> route to non-paging channels; validate thresholds only.
 
+If signal fails threshold/window/sample-size guards
+  -> ignore for paging and keep as log-only signal.
+Else
+  -> evaluate severity and incident correlation.
+
 If signal_volume == high
   -> allow anomaly + rate-based rules with dedupe/cooldown.
 Else
@@ -136,28 +174,46 @@ If signal_type == crash/ANR
 Else if signal_type == latency/performance
   -> prioritize performance severity path with user-impact gates.
 
+If correlated signals share incident key
+  -> open/update one incident.
+Else
+  -> create separate incident per deterministic key.
+
 If mitigation can be automated safely
   -> execute predefined automation (feature flag rollback, traffic guard).
 Else
   -> manual on-call response with incident commander when SEV1/SEV2.
+
+If rollback trigger threshold met and rollback-ready artifact exists
+  -> execute rollback.
+Else
+  -> wait/observe with bounded reassessment window.
+
+If issue is platform-specific
+  -> route to platform owner and platform-scoped incident.
+Else
+  -> route as global incident with cross-platform owner.
 ```
 
 ## Execution Workflow
-1. Collect required inputs and document assumptions.
-2. Classify telemetry signals into alertable operational events.
-3. Define SEV1-SEV4 taxonomy with user-impact criteria.
-4. Define alert thresholds, sustained/rate windows, and sample-size guards.
-5. Map each alert to ownership and escalation path.
-6. Attach runbooks and required diagnostics per alert.
-7. Define incident lifecycle states and state transitions.
-8. Define resolution criteria and recovery validation checks.
-9. Verify alert noise levels with historical replay/simulation.
-10. Produce output using the Output Contract exactly.
+1. Collect inputs.
+2. Define critical flows and impact areas.
+3. Map telemetry signals to alert conditions.
+4. Define severity levels and thresholds.
+5. Define deduplication and correlation rules.
+6. Define escalation and ownership.
+7. Define rollback/mitigation strategies.
+8. Define observability signals for alert health.
+9. Validate alert determinism and noise control.
+10. Produce structured output.
 
 ## Edge Cases
 - Crash spike immediately after release rollout.
+- Alert triggered by partial telemetry coverage.
 - Telemetry ingestion outage hides real failures.
+- Delayed telemetry causes late alert.
 - Retry storms create artificial error spikes.
+- Duplicate alerts flood system during active incident.
 - Backend outage manifests as mobile incident.
 - Stale alerts continue firing after mitigation/resolution.
 - Alert dedupe failure pages multiple teams for same event.
@@ -165,6 +221,13 @@ Else
 - Region-specific outage impacts subset of users only.
 - Symbolication delay obscures crash root cause.
 - Low-traffic periods trigger noisy percentage-based alerts.
+- Alert triggered but no owner acknowledges in escalation window.
+- Rollback trigger fires but rollback execution fails.
+- Platform-specific failure is misclassified as global incident.
+- Alert suppressed incorrectly during active user-impacting degradation.
+- Telemetry missing on critical path causes silent detection failure.
+- Correlated signals are not grouped, causing fragmented incident storms.
+- User impact is underestimated and severity is set too low.
 
 ## Observability
 Operational alert metrics/signals must be bounded, privacy-safe, and actionable:
@@ -176,8 +239,18 @@ Operational alert metrics/signals must be bounded, privacy-safe, and actionable:
 - `offline_queue_replay_failure_rate`
 - `offline_queue_depth`
 - `alert_trigger_rate`
+- `alert_noise_ratio`
+- `alert_to_incident_conversion_rate`
+- `alert_duplication_rate`
 - `alert_ack_time`
+- `mtta`
 - `incident_mttr`
+- `mttr`
+- `false_positive_rate`
+- `missed_incident_rate`
+- `escalation_success_rate`
+- `rollback_trigger_success_rate`
+- `user_impact_correlation_rate`
 
 Rules:
 - Include `env`, `platform`, `release`, and `feature_area` labels.
@@ -189,28 +262,27 @@ Return sections in this exact order:
 
 1. Context Summary
 2. Assumptions
-3. Alertable Signals
-4. Severity Taxonomy
-5. Alert Threshold Design
-6. Escalation Policy
-7. Incident Lifecycle
-8. Runbook Links
-9. Noise Mitigation Strategy
-10. Verification Checklist
+3. Alert Classification Model
+4. Signal-to-Alert Mapping
+5. Threshold Definitions
+6. Deduplication / Correlation Rules
+7. Escalation / Ownership Model
+8. Rollback / Mitigation Plan
+9. Observability Signals
+10. Failure Modes
 11. Risks / Rollback
 12. Next Implementation Step
 
 ## Verification Checklist
-- Alert signals are mapped from telemetry with clear ownership.
-- SEV1-SEV4 definitions are explicit and user-impact-based.
-- Threshold/rate windows include minimum sample-size guards.
-- Production and non-production routing is strictly separated.
-- Dedupe keys and cooldown windows prevent alert storms.
-- Every paging alert includes runbook and diagnostics checklist.
-- Escalation policy defines ack timeout and re-page behavior.
-- Incident lifecycle states and resolution criteria are explicit.
-- Telemetry freshness/ingestion delay handling prevents false paging.
-- Alert set passes noise-budget validation against historical data.
+- Alerts are actionable and owner-assigned.
+- Severity levels are explicit and user-impact-based.
+- Duplicate alerts for same incident are suppressed.
+- Alert triggers are deterministic for identical signal conditions.
+- Escalation path and ack policy exist.
+- Rollback or mitigation path exists for critical incidents.
+- Alert noise is bounded by budget and suppression rules.
+- Alert quality observability metrics are defined.
+- Alerts map to measurable user impact.
 
 ## Risks / Rollback
 - Risk: noisy rules overload on-call.
@@ -221,56 +293,19 @@ Return sections in this exact order:
   - Rollback: add pipeline-health alerts and fallback backend-derived monitors.
 - Risk: rollout-specific regression causes cascading incidents.
   - Rollback: trigger release rollback/feature kill switch and isolate affected cohort.
+- Risk: incorrect severity classification delays response.
+  - Rollback: reclassify severity rules and enforce stricter user-impact gates.
+- Risk: alerting configuration drifts from telemetry contract.
+  - Rollback: pin rule/schema versions and revalidate mapping before re-enable.
 
-## Example Request
-```text
-Telemetry backend: Datadog
-Alerting platform: PagerDuty
-Environment scope: staging + prod
-Ownership: Mobile Platform team + Feature teams
-On-call: primary/secondary 24x7
-Severity levels: SEV1-SEV4
-Escalation: ack 5m, re-page 10m, SEV1 manager escalation 15m
-Noise tolerance: max 6 pages/day/team
-Platform coverage: iOS + Android
-Signals: crash_rate, anr_rate, api_failure_rate, auth_error_rate, latency_p95, replay_failures
-```
-
-## Example Response Shape
-```text
-Context Summary
-- ...
-
-Assumptions
-- ...
-
-Alertable Signals
-- ...
-
-Severity Taxonomy
-- ...
-
-Alert Threshold Design
-- ...
-
-Escalation Policy
-- ...
-
-Incident Lifecycle
-- ...
-
-Runbook Links
-- ...
-
-Noise Mitigation Strategy
-- ...
-
-Verification Checklist
-- ...
-
-Risks / Rollback
-- ...
-
-Next Implementation Step
-- ...
-```
+## Example
+- Scenario:
+  - Crash spike after release on Android production cohort.
+  - `crash_rate` and `anr_rate` cross critical sustained thresholds.
+- Response:
+  - Signals correlate into one stability incident.
+  - Pager escalation triggers primary then secondary on-call.
+  - Rollback trigger model executes release rollback to previous stable build.
+- Recovery:
+  - Crash and ANR rates return below recovery threshold.
+  - Incident resolved and postmortem opened with timeline and failure mode summary.
