@@ -12,6 +12,9 @@ Structured AI engineering skills for React Native and Expo development.
 - [What This Project Is](#what-this-project-is)
 - [Why This Project Exists](#why-this-project-exists)
 - [Who This Project Is For](#who-this-project-is-for)
+- [Quick Start](#quick-start)
+- [Recommended Usage Modes](#recommended-usage-modes)
+- [How to Start](#how-to-start)
 - [How the Skill System Works](#how-the-skill-system-works)
 - [Installation](#installation)
 - [Plugin Domains Overview](#plugin-domains-overview)
@@ -58,7 +61,42 @@ This repository exists to encode deterministic engineering knowledge for React N
 - mobile teams using AI coding assistants
 - React Native architects
 - Expo production teams
+- teams that want deterministic engineering guidance
 - engineers building AI development workflows
+- teams that want fast planning plus deeper execution
+
+---
+
+## Quick Start
+
+- For fast project planning  
+  Install `mobile-platform-orchestrator`
+- For production-grade workflows  
+  Install `mobile-platform-orchestrator` plus the relevant specialist packs such as `expo-platform`, `mobile-data-platform`, `mobile-identity-security`, and `mobile-observability-reliability`
+- For focused deep work  
+  Install only the specialist pack that matches the domain you already know
+
+This repository is designed as a structured AI engineering skill system. The orchestrator is the fastest entry point for planning, while specialist packs provide the execution depth required for production work.
+
+---
+
+## Recommended Usage Modes
+
+- **Orchestrator-first**  
+  Best for new projects, architecture planning, and fast system setup
+- **Specialist-first**  
+  Best for focused implementation or debugging in a known domain
+- **Combined mode**  
+  Best for production workflows: use `mobile-platform-orchestrator` for planning and routing, then use specialist skills for execution depth
+
+---
+
+## How to Start
+
+1. Start with `mobile-platform-orchestrator`
+2. Let it identify the required domains and skills
+3. Use the selected specialist skills for implementation depth
+4. Combine the outputs into a production-ready plan
 
 ---
 
@@ -92,9 +130,15 @@ This structure helps different agents reach similar conclusions for the same eng
 
 You can install either:
 
-- the orchestrator plugin for broad intake and routing
-- specialist plugin packs for deep domain work
+- the orchestrator plugin for planning, intake, and skill routing
+- specialist plugin packs for deep domain execution
 - both together for the strongest production setup
+
+Practical guidance:
+
+- `mobile-platform-orchestrator` alone is the fastest way to start planning a mobile system
+- `mobile-platform-orchestrator` plus specialist packs gives full planning and execution coverage
+- specialist packs alone work best for focused deep work in a known domain
 
 ### Claude Code
 
@@ -143,7 +187,7 @@ bunx skills add amrjmd1/react-native-expo-skills
 ## Plugin Domains Overview
 
 - `mobile-platform-orchestrator`  
-  Single entry skill that classifies requests and routes into specialist domains.
+  Planning and coordination entry point that selects and sequences domain skills. It does not replace specialist execution depth.
 - `mobile-platform-architecture`  
   Monorepo structure, internal package ownership, shared platform boundaries, and versioning strategy.
 - `expo-platform`  
@@ -185,28 +229,33 @@ Some representative skills in the repository:
   Handles offline queues, sync retries, idempotency, and conflict resolution under unstable connectivity.
 
 For the full index, see [docs/SKILLS_INDEX.md](docs/SKILLS_INDEX.md).
+For problem-first selection, see [docs/SKILL_ROUTING.md](docs/SKILL_ROUTING.md).
 
 ---
 
 ## Example Agent Usage
 
-User request:
+Planning flow:
 
-> "My FlatList drops frames on Android."
+- User wants a mid-size app with auth, payments, offline sync, and analytics
+- Agent starts with `mobile-platform-orchestrator`
+- The orchestrator selects:
+  - `mobile-auth-session-security`
+  - `mobile-offline-sync-conflicts`
+  - `mobile-payments-subscriptions`
+  - `mobile-observability-telemetry`
+- The user then uses those specialist skills for implementation depth and system-specific decisions
 
-Agent loads skill:
+Focused debugging flow:
 
-`rn-list-performance-control`
-
-Skill workflow:
-
-1. classify list workload
-2. isolate render boundaries
-3. validate virtualization configuration
-4. compare debug vs release performance
-5. propose measurable remediation and verification steps
-
-The skill gives the agent a structured debugging path and a predictable output shape rather than generic performance advice.
+- User request: "My FlatList drops frames on Android."
+- Agent loads `rn-list-performance-control`
+- Skill workflow:
+  1. classify list workload
+  2. isolate render boundaries
+  3. validate virtualization configuration
+  4. compare debug vs release performance
+  5. propose measurable remediation and verification steps
 
 ---
 
@@ -224,6 +273,13 @@ The skill gives the agent a structured debugging path and a predictable output s
 ## Skill Quality System
 
 This repository uses explicit quality gates for every new or updated skill.
+
+The discovery and execution system is organized across:
+
+- [docs/SKILLS_INDEX.md](docs/SKILLS_INDEX.md)  
+  Fast domain-based discovery of available skills
+- [docs/SKILL_ROUTING.md](docs/SKILL_ROUTING.md)  
+  Problem-first routing from engineering issue to skill selection
 
 - [docs/SKILL_TEMPLATE.md](docs/SKILL_TEMPLATE.md)  
   Defines the required shape and sections for every skill.
@@ -259,6 +315,12 @@ docs/
 ```
 
 Plugins group related domains into specialist packs. Each skill is implemented as a `SKILL.md` plus agent-specific metadata.
+
+In practice:
+
+- use `mobile-platform-orchestrator` as the coordination layer when planning spans domains
+- use specialist packs when implementation depth is required
+- combine both for production-ready workflows
 
 ---
 
