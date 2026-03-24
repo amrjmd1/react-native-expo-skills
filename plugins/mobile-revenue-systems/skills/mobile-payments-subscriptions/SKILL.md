@@ -275,3 +275,16 @@ Design deterministic, platform-aware mobile purchase and subscription systems wi
   - Validation timeout keeps entitlement in pending state; retry policy runs; no duplicate grant.
 - Restore:
   - User installs on new device, runs restore, server reconciliation restores active entitlement.
+
+## Example Request
+
+"Use this skill to produce a production-safe implementation plan for this app scenario, including assumptions, architecture choices, validation steps, and rollback notes."
+
+## Example Response Shape
+
+- Context Summary
+- Assumptions
+- Implementation Plan
+- Validation Checklist
+- Risks / Rollback
+- Next Implementation Step

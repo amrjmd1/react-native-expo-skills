@@ -164,3 +164,22 @@ Integrate native modules in RN CLI projects with deterministic iOS/Android setup
   - Rollback: disable module path and fall back to guarded no-op behavior.
 - Risk: integration drift between local and CI blocks release.
   - Rollback: restore CI-aligned dependency/config contract and rerun verification matrix.
+
+## Provider-Specific Directives
+
+- If a third-party provider is involved, bind implementation details to the provider SDK contract instead of generic assumptions.
+- If provider behavior conflicts with local architecture, prefer provider-authoritative state ownership and document exceptions explicitly.
+- If provider is `custom`, require explicit API contract, error model, retry policy, and lifecycle semantics before implementation.
+
+## Example Request
+
+"Use this skill to produce a production-safe implementation plan for this app scenario, including assumptions, architecture choices, validation steps, and rollback notes."
+
+## Example Response Shape
+
+- Context Summary
+- Assumptions
+- Implementation Plan
+- Validation Checklist
+- Risks / Rollback
+- Next Implementation Step

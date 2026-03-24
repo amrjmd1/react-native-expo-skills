@@ -212,3 +212,22 @@ Design deterministic mobile CI/CD systems for React Native and Expo apps with ex
 - CI flow: validate -> build (`aab`, `ipa`) -> verify/sign -> promote immutable candidate.
 - Promotion uses unchanged artifact from staging to production with provenance checks.
 - Rollback plan references previous signed production candidate and tested rollback command path.
+
+## Provider-Specific Directives
+
+- If a third-party provider is involved, bind implementation details to the provider SDK contract instead of generic assumptions.
+- If provider behavior conflicts with local architecture, prefer provider-authoritative state ownership and document exceptions explicitly.
+- If provider is `custom`, require explicit API contract, error model, retry policy, and lifecycle semantics before implementation.
+
+## Example Request
+
+"Use this skill to produce a production-safe implementation plan for this app scenario, including assumptions, architecture choices, validation steps, and rollback notes."
+
+## Example Response Shape
+
+- Context Summary
+- Assumptions
+- Implementation Plan
+- Validation Checklist
+- Risks / Rollback
+- Next Implementation Step

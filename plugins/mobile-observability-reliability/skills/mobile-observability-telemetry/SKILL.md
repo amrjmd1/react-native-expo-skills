@@ -288,3 +288,16 @@ Design a production-grade telemetry system for React Native and Expo apps with d
   - Reuse same `trace_id` across login event sequence and API span.
 - Observability usage:
   - Alert on login failure spike, crash mismatch, and missing `login_terminal` events.
+
+## Example Request
+
+"Use this skill to produce a production-safe implementation plan for this app scenario, including assumptions, architecture choices, validation steps, and rollback notes."
+
+## Example Response Shape
+
+- Context Summary
+- Assumptions
+- Implementation Plan
+- Validation Checklist
+- Risks / Rollback
+- Next Implementation Step

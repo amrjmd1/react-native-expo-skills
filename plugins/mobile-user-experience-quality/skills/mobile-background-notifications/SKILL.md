@@ -223,3 +223,22 @@ Design a reliable notification delivery and handling system for React Native and
   - Verify duplicate push does not duplicate navigation or action.
   - Verify stale notification beyond `ttl` is ignored.
   - Verify permission-denied path shows recovery UX.
+
+## Provider-Specific Directives
+
+- If a third-party provider is involved, bind implementation details to the provider SDK contract instead of generic assumptions.
+- If provider behavior conflicts with local architecture, prefer provider-authoritative state ownership and document exceptions explicitly.
+- If provider is `custom`, require explicit API contract, error model, retry policy, and lifecycle semantics before implementation.
+
+## Example Request
+
+"Use this skill to produce a production-safe implementation plan for this app scenario, including assumptions, architecture choices, validation steps, and rollback notes."
+
+## Example Response Shape
+
+- Context Summary
+- Assumptions
+- Implementation Plan
+- Validation Checklist
+- Risks / Rollback
+- Next Implementation Step

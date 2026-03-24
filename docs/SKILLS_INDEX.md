@@ -66,7 +66,7 @@ Workspace topology, package boundaries, and internal platform scaling.
 
 | Skill | Description | Path |
 |------|-------------|------|
-| mobile-monorepo-package-architecture | Defines workspace boundaries, package contracts, and versioning policy across mobile repos. | `plugins/mobile-platform-architecture/skills/mobile-monorepo-package-architecture` |
+| mobile-platform-orchestrator | Orchestrates architecture-level domain routing, dependency ordering, and cross-domain conflict resolution. | `plugins/mobile-platform-architecture/skills/mobile-platform-orchestrator` |
 
 ## mobile-platform-orchestrator
 Cross-domain triage and fallback routing across mobile engineering domains.

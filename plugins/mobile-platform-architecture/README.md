@@ -4,21 +4,21 @@ Pack for scaling large mobile codebases through monorepo and package governance.
 
 ## Scope
 
-Use this pack for workspace topology, shared UI kit boundaries, dependency graph health, and internal package versioning strategy.
+Use this pack for architecture-level orchestration across platform domains, dependency sequencing, and cross-domain decision alignment.
 
 ## Skills
 
-1. `mobile-monorepo-package-architecture`
-Monorepo design, package ownership, release/version policy, and migration planning.
+1. `mobile-platform-orchestrator`
+Architecture orchestration, domain routing, dependency ordering, and unified system planning.
 
 ## Typical Senior Use Cases
 
-- Split monolith apps into reusable and domain-owned packages.
-- Standardize package API contracts and release cadence.
-- Prevent dependency drift and cross-team coupling.
+- Route complex cross-domain initiatives into an executable phase plan.
+- Resolve conflicts between security, data, UX, and delivery decisions.
+- Align multi-team architecture decisions into one deterministic roadmap.
 
 ## Quality Bar
 
-- Clear ownership boundaries.
-- Stable internal package contracts.
-- Predictable release/version operations.
+- Deterministic domain routing.
+- Explicit dependency and conflict handling.
+- Cohesive system-level execution planning.

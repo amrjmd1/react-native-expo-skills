@@ -232,3 +232,16 @@ Orchestrate domain skills into one coherent mobile system plan by selecting the 
   - Resolve conflicts: payments authority vs offline caching, observability depth vs privacy constraints.
 - Result:
   - Unified system plan with one dependency map, one assumption set, and phased implementation steps.
+
+## Example Request
+
+"Use this skill to produce a production-safe implementation plan for this app scenario, including assumptions, architecture choices, validation steps, and rollback notes."
+
+## Example Response Shape
+
+- Context Summary
+- Assumptions
+- Implementation Plan
+- Validation Checklist
+- Risks / Rollback
+- Next Implementation Step

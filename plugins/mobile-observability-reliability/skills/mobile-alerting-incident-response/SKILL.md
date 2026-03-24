@@ -309,3 +309,16 @@ Return sections in this exact order:
 - Recovery:
   - Crash and ANR rates return below recovery threshold.
   - Incident resolved and postmortem opened with timeline and failure mode summary.
+
+## Example Request
+
+"Use this skill to produce a production-safe implementation plan for this app scenario, including assumptions, architecture choices, validation steps, and rollback notes."
+
+## Example Response Shape
+
+- Context Summary
+- Assumptions
+- Implementation Plan
+- Validation Checklist
+- Risks / Rollback
+- Next Implementation Step

@@ -164,3 +164,22 @@ Define reliable Expo release operations across EAS Build, EAS Submit, and releas
   - Rollback: halt rollout, revert release path, and publish corrective update strategy.
 - Risk: runtime/channel mismatch causes broken update compatibility.
   - Rollback: stop promotion, restore prior channel mapping, and rebuild with corrected runtime policy.
+
+## Provider-Specific Directives
+
+- If a third-party provider is involved, bind implementation details to the provider SDK contract instead of generic assumptions.
+- If provider behavior conflicts with local architecture, prefer provider-authoritative state ownership and document exceptions explicitly.
+- If provider is `custom`, require explicit API contract, error model, retry policy, and lifecycle semantics before implementation.
+
+## Example Request
+
+"Use this skill to produce a production-safe implementation plan for this app scenario, including assumptions, architecture choices, validation steps, and rollback notes."
+
+## Example Response Shape
+
+- Context Summary
+- Assumptions
+- Implementation Plan
+- Validation Checklist
+- Risks / Rollback
+- Next Implementation Step

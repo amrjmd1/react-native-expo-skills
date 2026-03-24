@@ -164,3 +164,22 @@ Identify measurable performance bottlenecks in RN apps and deliver verified, low
   - Rollback: revert scoped changes and restore last stable behavior.
 - Risk: metric gains are not reproducible.
   - Rollback: discard optimization and reprofile with controlled setup.
+
+## Provider-Specific Directives
+
+- If a third-party provider is involved, bind implementation details to the provider SDK contract instead of generic assumptions.
+- If provider behavior conflicts with local architecture, prefer provider-authoritative state ownership and document exceptions explicitly.
+- If provider is `custom`, require explicit API contract, error model, retry policy, and lifecycle semantics before implementation.
+
+## Example Request
+
+"Use this skill to produce a production-safe implementation plan for this app scenario, including assumptions, architecture choices, validation steps, and rollback notes."
+
+## Example Response Shape
+
+- Context Summary
+- Assumptions
+- Implementation Plan
+- Validation Checklist
+- Risks / Rollback
+- Next Implementation Step
